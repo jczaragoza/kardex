@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title> FICHA {{ organizacion.nombre }}</title>
+        <link rel="stylesheet" href="/static/lib/bootstrap-4.6.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/lib/fontawesome-5.15.3/css/all.min.css">
+        <link rel="stylesheet" href="/static/lib/jquery-ui-1.12.1/jquery-ui.css">
+
+        <!-- Google Font -->
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+
+        <!-- FontAwesome JS-->
+        <script defer src="/static/assets/fontawesome/js/all.min.js"></script>
+        
+        <style>
+            .abs-center {
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+            }
+            .abs-right {
+                display: flex; 
+                align-items: right; 
+                justify-content: right;
+            }
+            .col-color{
+                background-color:
+                rgb(223, 223, 223);
+            }
+            .w-95{
+                width: 95%;
+            }
+            .font-smaller{
+                font-size: smaller;                
+            }
+            .bg-row{
+                background-color: rgb(10, 0, 153);
+            }
+            .bg-gray{
+                background-color: rgb(199, 199, 199);
+            }
+            .bg-pink{
+                background-color: rgb(82, 0, 158);
+            }
+        </style>
+    </head>
+
+    <body class="font-smaller">
+        <!-- Título-->
+        {% if organizacion.tipo_organizacion == "Colectivo Feminista" %}
+            <div class="row rounded bg-pink ">
+                <div class="col"></div>
+                <div class="col-6 text-center"><h4 class="m-2 text-white" ><strong> FICHA DE ORGANIZACIÓN</strong></h4></div>
+                <div class="col text-right text-white mt-3"><strong>ID {{organizacion.id}}</strong></div>
+            </div>
+        {% elif organizacion.tipo_organizacion == "Organización Social"  %}
+            <div class="row rounded bg-row ">
+                <div class="col"></div>
+                <div class="col-6 text-center"><h4 class="m-2 text-white" ><strong> FICHA DE ORGANIZACIÓN</strong></h4></div>
+                <div class="col text-right text-white mt-3"><strong>ID {{organizacion.id}}</strong></div>
+            </div>
+        {% elif organizacion.tipo_organizacion == "Colectivo Ciclista"%}
+            <div class="row rounded bg-success ">
+                <div class="col"></div>
+                <div class="col-6 text-center"><h4 class="m-2 text-white" ><strong> FICHA DE ORGANIZACIÓN</strong></h4></div>
+                <div class="col text-right text-white mt-3"><strong>ID {{organizacion.id}}</strong></div>
+            </div>
+        {% elif organizacion.tipo_organizacion == "Colectivo Civil"%}
+            <div class="row rounded bg-danger ">
+                <div class="col"></div>
+                <div class="col-6 text-center"><h4 class="m-2 text-white" ><strong> FICHA DE ORGANIZACIÓN</strong></h4></div>
+                <div class="col text-right text-white mt-3"><strong>ID {{organizacion.id}}</strong></div>
+            </div>
+        {% else %}
+            <div class="row rounded bg-warning ">
+                <div class="col"></div>
+                <div class="col-6 text-center"><h4 class="m-2 text-white" ><strong> FICHA DE ORGANIZACIÓN</strong></h4></div>
+                <div class="col text-right text-white mt-3"><strong>ID {{organizacion.id}}</strong></div>
+            </div>
+        {% endif %}
+        <p>
+
+        <!--ENCABEZADO-->   
+        <div class="row rounded bg-secondary align-items-center">
+            <div class="col">
+                <div class="row">
+                    {% if organizacion.nombre|length > 0 %}
+                        <div class="col"></div>
+                        <div class="col-auto"><h4 class="mt-2 text-white text-center" ><strong>{{organizacion.nombre}}</strong></h4></div>
+                        <div class="col"></div>
+                    {% endif %}
+                </div>
+                <hr>
+
+                <div class="row">
+                            <div class="col abs-center">
+                                <div class="col-5">
+                                        {%if organizacion.poder_convocatoria == 'Bajo'%}
+                                            <div class="progress resume-progress">
+                                                <div class="progress-bar theme-progress-bar bg-success rounded" role="progressbar" style="width: 33.3%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        {% elif organizacion.poder_convocatoria == 'Medio' %}
+                                            <div class="progress resume-progress">
+                                                <div class="progress-bar theme-progress-bar bg-warning rounded" role="progressbar" style="width: 66.6%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        {% elif organizacion.poder_convocatoria == 'Alto' %}
+                                            <div class="progress resume-progress">
+                                                <div class="progress-bar theme-progress-bar bg-danger" role="progressbar" style="width: 99.9%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        {% endif %}
+                                        <h6 class="text-white text-center">Poder de convocatoria: {{organizacion.poder_convocatoria}} </h6>
+                                </div>
+                                <div class="col-5">
+                                        {%if organizacion.riesgo == 'Bajo'%}
+                                            <div class="progress resume-progress">
+                                                <div class="progress-bar theme-progress-bar bg-success rounded" role="progressbar" style="width: 33.3%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        {% elif organizacion.riesgo == 'Medio' %}
+                                            <div class="progress resume-progress">
+                                                <div class="progress-bar theme-progress-bar bg-warning rounded" role="progressbar" style="width: 66.6%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        {% elif organizacion.riesgo == 'Alto' %}
+                                            <div class="progress resume-progress">
+                                                <div class="progress-bar theme-progress-bar bg-danger" role="progressbar" style="width: 99.9%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        {% endif %}
+                                        <h6 class="text-white text-center">Riesgo: {{organizacion.riesgo}} </h6>
+                                </div>
+                            </div>
+                </div>
+
+            </div>
+            {% if organizacion.foto %}
+                <div class="col-2 m-2">
+                    <img src=" {{ organizacion.foto.url }}" alt="{{organizacion.nombre}}" class=" img-thumbnail rounded border-2 border-dark mr-5" style="height: 165px;">
+                </div>  
+            {% else %}
+                <div class="col-2 m-2">
+                    <img src=" {% static "/img/user1.png" %}" alt="{{organizacion.nombre}}" class=" img-thumbnail rounded border-2 border-dark mr-5" style="height: 165px;">
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- última MODIFICACIÓN -->
+        <div class="row rounded bg-white text-dark">
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col-7"><h6 class="text-dark m-2 text-right"><i class='fas fa-bell'></i>&nbsp;&nbsp; Última Actualización: {{organizacion.modified}} hrs. </h6></div>
+        </div>
+        
+        <!-- FECHA CREACIÓN -->
+        <div class="row">
+            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                <span class="text-white"><strong> Fecha de Creación </strong></span>
+            </div>
+            <div class="col rounded bg-ligth border-bottom border-right">
+                <p class="text-justify m-1"><span> {{organizacion.fecha_creacion|date:" d - M - Y "}} </span></p>
+            </div>
+        </div>
+
+        <!-- ANTECEDENTES -->
+        {% if organizacion.inicio_actividades %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Antecedentes </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.inicio_actividades}} </span></p>
+                </div>
+            </div>
+        {% endif %}
+
+        <!--REGISTRO-->
+        {% if organizacion.registro|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Registro </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.registro }} </span></p>
+                </div>
+            </div>
+        {% endif %}  
+
+        <!--TIPO ORGANIZACION-->
+        {% if organizacion.tipo_organizacion|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Tipo de Organización </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.tipo_organizacion }} </span></p>
+                </div>
+            </div>
+        {% endif %}
+
+        <!--OBJETIVO-->
+        {% if organizacion.objetivo|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Objetivo </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.objetivo }} </span></p>
+                </div>
+            </div> 
+        {% endif %}            
+
+        <!--TENDENCIA-->
+        {% if organizacion.tendencia|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Tendencia </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.tendencia }} </span></p>
+                </div>
+            </div>
+        {% endif %}
+        
+        <!--INTEGRANTES-->
+        {% if organizacion.integrantes|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Integrantes </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.integrantes }} </span></p>
+                </div>
+            </div>
+        {% endif %}
+            
+        <!--LÍDERES-->
+        {% if organizacion.lideres.all|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Dirigentes </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    {% for lider in organizacion.lideres.all %}
+                        <p class="text-justify m-1">
+                            <span> {{ lider.nombre|title }} {{lider.apaterno|title}} {{lider.amaterno|title}} 
+                                {% if lider.puesto_ocupado|length > 0 %} 
+                                    | {{lider.puesto_ocupado}}
+                                {% endif %}
+                            </span>
+                        </p>
+                    {% endfor %}                      
+                </div>
+            </div>
+        {% endif %}       
+        
+        <!--DIRIGENTES-->
+        {% if organizacion.integrantes_nombres.all|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Integrantes </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    {% for integrante in organizacion.integrantes_nombres.all %}
+                        <p class="text-justify m-1">
+                            <span>
+                                {{ integrante.nombre|title }} {{integrante.cargo|title}}
+                            </span>
+                        </p>
+                    {% endfor %}                      
+                </div>
+            </div>
+        {% endif %}              
+
+        <!--DIRECCION-->
+        {% if organizacion.direccion|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Dirección </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.direccion }} </span></p>
+                </div>
+            </div>       
+        {% endif %}            
+
+        <!--TElefono-->
+        {% if organizacion.telefono|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Teléfono </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.telefono }} </span></p>
+                </div>
+            </div>
+        {% endif %}
+
+        <!--correo-->
+        {% if organizacion.correo|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Correo </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.correo }} </span></p>
+                </div>
+            </div>
+        {% endif %}
+
+        
+        <!--sitio web-->
+        {% if organizacion.sitio_web|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Sitio WEB </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.sitio_web }} </span></p>
+                </div>
+            </div>
+        {% endif %}
+        
+
+        <!-- REDES SOCIALES-->
+        {% if organizacion.facebook|length > 0 or organizacion.instagram|length > 0  or organizacion.twitter|length > 0 %}
+        <div class="row">
+            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                <div class="text-center"><span class="text-white"><strong>Redes Sociales</strong></span></div>
+            </div>
+            <div class="col">
+                {% if organizacion.facebook|length > 0 %}
+                    <div class="row">
+                        <div class="col-2 rounded bg-ligth border-bottom border-right">
+                            <i class='fab fa-facebook'></i> &nbsp; <strong> Facebook </strong>
+                        </div>
+                        <div class="col rounded bg-ligth border-bottom border-right">
+                            <p class="text-justify m-2"><span> <i class="fas fa-thumbs-up"></i> {{organizacion.seguidores}} | {{organizacion.facebook}}</span></p>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if organizacion.instagram|length > 0 %}
+                    <div class="row">
+                        <div class="col rounded bg-ligth border-bottom border-right">
+                            <i class='fab fa-instagram'></i> &nbsp; <strong> Instagram </strong>
+                        </div>
+                        <div class="col rounded bg-ligth border-bottom border-right">
+                            <p class="text-justify m-2"><span>{{organizacion.instagram}}</span></p>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if organizacion.twitter|length > 0 %}
+                    <div class="row">
+                        <div class="col rounded bg-ligth border-bottom border-right">
+                            <i class='fab fa-twitter'></i> &nbsp; <strong> Twitter </strong>
+                        </div>
+                        <div class="col rounded bg-ligth border-bottom border-right">
+                            <p class="text-justify m-2"><span>{{organizacion.twitter}}</span></p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+        </div>
+        {% endif %}  
+
+        
+        <!--Zona de influencia-->
+        {% if organizacion.zona_influencia|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Zona de Influencia </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.zona_influencia }} </span></p>
+                </div>
+            </div> 
+        {% endif %}
+
+        <!--Zona de operaciones-->
+        {% if organizacion.zona_operaciones|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Zona de Operaciones </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.zona_operaciones }} </span></p>
+                </div>
+            </div>   
+        {% endif %}
+
+        <!--Capacidad convocatoria-->
+        {% if organizacion.capacidad_convocatoria|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Capacidad de Convocatoria </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.capacidad_convocatoria }} </span></p>
+                </div>
+            </div>
+        {% endif %}   
+        
+        <!--Modus operandi-->
+        {% if organizacion.modus_operandi|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Modus Operandi </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.modus_operandi }} </span></p>
+                </div>
+            </div>   
+        {% endif %}
+
+        <!--Principales Actividades-->
+        {% if organizacion.principales_actividades|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Principales Actividades </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.principales_actividades }} </span></p>
+                </div>
+            </div> 
+        {% endif %}
+            
+        <!-- VÍNCULOS-->
+        {% if organizacion.vinculos_os|length > 0 or organizacion.vinculos_op|length > 0 or organizacion.vinculos_pp|length > 0  or organizacion.vinculos_au|length > 0 or organizacion.vinculos_de|length > 0 %}
+        <div class="row">
+            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                <div class="text-center"><span class="text-white"><strong>Vínculos</strong></span></div>
+            </div>
+            <div class="col rounded bg-ligth border-bottom border-right">
+                {% if organizacion.vinculos_os|length > 0 %}
+                    <div class="row border border-white rounded">
+                        <p class=" m-3 text-justify"><span><strong>Con organizaciones sociales: </strong></span></span>{{organizacion.vinculos_os}}</p>
+                    </div>
+                {% endif %}
+                {% if organizacion.vinculos_op|length > 0 %}
+                    <div class="row border border-white rounded">
+                        <p class="text-justify m-3"><span><strong>Con organizaciones políticas: </strong></span></span>{{organizacion.vinculos_op}}</p>
+                    </div>
+                {% endif %}
+                {% if organizacion.vinculos_pp|length > 0 %}
+                    <div class="row border border-white rounded">
+                        <p class="text-justify m-3"><span><strong>Con partidos políticos: </strong></span></span>{{organizacion.vinculos_pp}}</p>
+                    </div>
+                {% endif %}
+                {% if organizacion.vinculos_au|length > 0 %}
+                    <div class="row border border-white rounded">
+                        <p class="text-justify m-3"><span><strong>Con autoridades: </strong></span></span>{{organizacion.vinculos_au}}</p>
+                    </div>
+                {% endif %}
+                {% if organizacion.vinculos_de|length > 0 %}
+                    <div class="row border border-white rounded">
+                        <p class="text-justify m-3"><span><strong>Delictivos: </strong></span></span>{{organizacion.vinculos_de}}</p>
+                    </div>
+                {% endif %}
+            </div>
+
+        </div>
+        {% endif %}        
+            
+        <!--Fuente de ingresos-->
+        {% if organizacion.fuente_ingresos|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Fuente de Ingresos </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.fuente_ingresos }} </span></p>
+                </div>
+            </div>   
+        {% endif %}
+
+        <!-- SITUACION PATRIMONIAL -->
+        {% if organizacion.inmuebles|length > 0 or organizacion.vehiculos|length > 0 or organizacion.cuentas_bancarias|length > 0 or organizacion.inverisones|length > 0 or organizacion.negocios|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Situación Patrimonial</strong></span></div>
+                </div>
+                <div class="col col-color border border-white">
+                    {% if organizacion.inmuebles|length > 0 %}
+                        <div class="row border border-white rounded">
+                            <p class="text-justify m-3"><span><strong>Inmuebles: </strong></span></span>{{organizacion.inmuebles}}</p>
+                        </div>
+                    {% endif %}
+                    {% if organizacion.vehiculos|length > 0 %}
+                        <div class="row border border-white rounded">
+                            <p class="text-justify m-3"><span><strong>Vehículos: </strong></span></span>{{organizacion.vehiculos}}</p>
+                        </div>
+                    {% endif %}
+                    {% if organizacion.cuentas_bancarias|length > 0 %}
+                        <div class="row border border-white rounded">
+                            <p class="text-justify m-3"><span><strong>Cuentas bancarias: </strong></span></span>{{organizacion.cuentas_bancarias}}</p>
+                        </div>
+                    {% endif %}
+                    {% if organizacion.inversiones|length > 0 %}
+                        <div class="row border border-white rounded">
+                            <p class="text-justify m-3"><span><strong> Inversiones: </strong></span></span>{{organizacion.inversiones}}</p>
+                        </div>
+                    {% endif %}
+                    {% if organizacion.negocios|length > 0 %}
+                        <div class="row border border-white rounded">
+                            <p class="text-justify m-3"><span><strong>Negocios: </strong></span></span>{{organizacion.negocios}}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+        
+        <!--DEMANDAS-->
+        {% if organizacion.demandas|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Demandas </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.demandas }} </span></p>
+                </div>
+            </div>      
+        {% endif %}
+
+        <!--MEDIDAS DE PRESIóN-->
+        {% if organizacion.medidas_presion|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Medidas de Presión </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.medidas_presion }} </span></p>
+                </div>
+            </div>       
+        {% endif %}
+        
+        <!--GRUPOS DE CHOQUE-->
+        {% if organizacion.grupos_choque|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Grupos de Choque </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.grupos_choque }} </span></p>
+                </div>
+            </div>    
+        {% endif %}
+
+        <!-- CONFLICTOS-->
+        {% if organizacion.conflictos_organizaciones|length > 0 or organizacion.conflictos_legales|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Conflictos</strong></span></div>
+                </div>
+                <div class="col rounded bg-ligth">
+                    {% if organizacion.conflictos_organizaciones|length > 0 %}
+                        <div class="row rounded border-bottom border-right">
+                            <p class="text-justify m-3"><span><strong>Con organizaciones: </strong></span></span>{{organizacion.conflictos_organizaciones}}</p>
+                        </div>
+                    {% endif %}
+                    {% if organizacion.conflictos_legales|length > 0 %}
+                        <div class="row rounded border-bottom border-right">
+                            <p class="text-justify m-3"><span><strong>Legales: </strong></span></span>{{organizacion.conflictos_legales}}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- OBSERVACIONES-->
+        {% if organizacion.observaciones|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Observaciones </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.observaciones}} </span></p>
+                </div>
+            </div>     
+        {% endif %}
+
+        <!-- Grupos disidentes-->
+        {% if organizacion.grupos_disidentes|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Grupos Disidentes </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.grupos_disidentes}} </span></p>
+                </div>
+            </div>    
+        {% endif %}
+
+        <!-- Organos de Difusión-->
+        {% if organizacion.organos_difusion|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Órganos de Difusión </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.organos_difusion}} </span></p>
+                </div>
+            </div>   
+        {% endif %}
+
+
+        <!-- Perfil-->
+        {% if organizacion.perfil|length > 0 %}
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <span class="text-white"><strong> Perfil </strong></span>
+                </div>
+                <div class="col rounded bg-ligth border-bottom border-right">
+                    <p class="text-justify m-1"><span> {{organizacion.perfil}} </span></p>
+                </div>
+            </div>  
+        {% endif %}
+        <p>
+
+        <!--EVENTOS-->
+        {% if organizacion.eventos.all|length > 0 %}
+            <div class="row">
+                <div class="col-4"></div>
+                <div class="col abs-center bg-gray rounded">
+                    <div class="row p-2">
+                        <span class="text-dark m-2"><strong>ACCIONES RELEVANTES</strong></span>
+                    </div>
+                </div>
+                <div class="col-4"></div>
+            </div>
+
+            {% for evento in organizacion.eventos.all %}
+                <div class="row">
+                    <div class="col-3 bg-secondary border border-white rounded abs-center">
+                        <span class="text-white"><strong>{{evento.fecha_evento}}</strong></span>
+                    </div>
+                    <div class="col rounded col-secondary">
+                        <div class="row">
+                            <div class="col abs-center">
+                                <p class="text-center text-secondary mt-1"><span><strong> {{evento.nombre }} </strong></span></p>
+                            </div>  
+                        </div>
+                        <div class="row">
+                            <div class="col abs-center rounded  border-bottom border-right">
+                                <p class=" ml-3 mr-3 text-justify"> {{ evento.descripcion }} </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </body>
+    <!--
+    <div class="row bg-secondary rounded  " >
+        <div class="col abs-center">
+            <h6 class="text-center text-white" ><strong>Última actualización {{organizacion.modified}} hrs.</strong></h6>
+        </div>
+    </div>
+    -->
+</html>
+

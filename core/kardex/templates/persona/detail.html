@@ -1,0 +1,346 @@
+{% extends 'skin.html' %}
+{% load static %}
+
+{% block head_body %}
+    <link rel="shortcut icon" href="favicon.ico"> 
+        
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+
+    <!-- FontAwesome JS-->
+    <script defer src="/static/assets/fontawesome/js/all.min.js"></script>
+    
+    <!-- Theme CSS -->  
+    <link id="theme-style" rel="stylesheet" href="/static/assets/css/pillar-1.css">
+        <!--Block head list-->
+    {% block head_list %}{% endblock %}
+{% endblock %}
+
+{% block content%}
+
+<div class="card card-primary">
+
+    <div class="card-header">   
+        <h2 class="card-title">
+            <i class="fas fa-user"></i>
+            KARDEX DE {{persona.nombre}} {{persona.apaterno}} {{persona.amaterno}}
+        </h2>
+        <a href="{% url 'reports:export_pdf' persona.pk %}" target="_blank" class="ml-1 btn bg-gradient-primary btn-round float-right">
+            <i class="fas fa-file-pdf"></i> Generar PDF
+        </a>
+        <a href="{% url 'kardex:persona_update' persona.pk %}" class="ml-1 btn bg-gradient-success btn-round float-right">
+            <i class="fas fa-user-edit"></i> Editar
+        </a> 
+        <a href="{{request.META.HTTP_REFERER}}" class="btn bg-gradient-danger btn-round float-right">
+            <i class="fas fa-backward"></i> Atras
+        </a>
+    </div>
+    
+    <!--BODY-->   
+    <div class="card-body bg-light rounded text-dark">
+
+        <!--ENCABEZADO-->
+        <div class="row text-white rounded bg-gradient-dark">
+                <div class="col-auto abs-center mt-2">
+                    {% if persona.foto %}
+                        <img src=" {{ persona.foto.url }}" alt="{{persona.nombre}}" class="img-thumbnail rounded border"  style = "width:145px; height: 170px"  >
+                    {% else %}
+                        <img src="{% static "img/user1.png" %}" class=" rounded border img-fluid"  style = "width:145px; height: 170px" />
+                    {% endif %}
+                </div><!--//col-->
+    
+                <div class="col-5 border-right mt-2">
+                    <div class="row align-items-left">
+                        <div class="primary-info col-auto">
+                            <h5 class="name mt-0 mb-1 text-white text-uppercase"><strong>{{persona.nombre}} {{persona.apaterno}} {{persona.amaterno}}</strong></h5>
+                            <div><h6>{{persona.puesto}} </h6></div>
+                            <hr>
+                           <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-birthday-cake me-2" data-fa-transform="grow-3"></i>&nbsp;&nbsp; {{persona.fecha_nacimiento}}</li> 
+                                <li class="mb-2"><i class="far fa-calendar-alt me-2" data-fa-transform="grow-3"></i>&nbsp;&nbsp; {{persona.get_edad}} años</li>
+                                {%  if persona.correo|length > 0 %}
+                                    <li class="mb-2"><i class="far fa-envelope fa-fw me-2" data-fa-transform="grow-3"></i>&nbsp;&nbsp;{{persona.correo}}</li>
+                                {% endif %}
+                            </ul>
+                            
+                        </div><!--//primary-info-->
+                            
+                    </div><!--//row-->
+                        
+                </div><!--//col-->
+            
+                <div class="col">
+                    <ul class="resume-social list-unstyled">
+                        <li class="m-2"><i class="fas fa-genderless me-2" data-fa-transform="grow-3"></i>&nbsp;&nbsp;<strong>RFC: </strong>{{persona.rfc}}</li>
+                        <li class="m-2"><i class="fas fa-genderless me-2" data-fa-transform="grow-3"></i>&nbsp;&nbsp;<strong>CURP: </strong>{{persona.curp}}</li>
+                        <li class="m-2"><i class="fas fa-genderless	 me-2" data-fa-transform="grow-3"></i>&nbsp;&nbsp;<strong>CUIP: </strong>{{persona.cuip}}</li>
+                        <li class="m-2"><i class="fas fa-genderless me-2" data-fa-transform="grow-3"></i>&nbsp;&nbsp;<strong>CSP: </strong>{{persona.clavesp}}</li>
+                        <li class="mb-2">
+                            {%if persona.estatus == 'Activo'%}
+                                <div class="form-check ml-1 ">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Activo                                
+                                    </label>
+                                </div>
+                            {%elif persona.estatus == 'Inactivo'%}
+                                <div class="form-check ml-1 ">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Inactivo
+                                    </label>
+                                </div>
+                            {%elif persona.estatus == 'Comisionada(o)'%}
+                                <div class="form-check ml-1 ">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        {{persona.estatus}}
+                                    </label>
+                                </div>
+                            {% endif %}
+                        </li>
+                    </ul>
+    
+                </div> 
+    
+        </div>
+
+        <br>
+        
+        <div class="row">
+            {% if cursos|length > 0 or armas|length > 0 or vehiculos|length > 0%}
+                <div class="col-8 mb-2 ml-2 mr-2">
+            {% else %}
+                <div class="col-12 mr-3">
+            {% endif %}    
+                <div class="row rounded bg-dark">
+                    <div class="col"></div>
+                    <div class="col-auto text-center"><h6 class="mt-2 text-white " ><strong> DATOS PERSONALES </strong></h6></div>
+                    <div class="col"></div>
+                </div>   
+                <br> 
+                <section class="resume-section experience-section mb-4">
+                    <div class="resume-section-content">
+                        <div class="resume-timeline position-relative">
+                            <article class="resume-timeline-item position-relative">
+                                <div class="resume-timeline-item-header mb-2">
+                                    <h4 class="resume-section-title text-uppercase font-weight-bold pb-3 ">Puesto</h4>
+                                    <li><strong>Número de Plaza: </strong>{{ persona.num_plaza|default_if_none:'Sin Información' }}</li>
+                                    <li><strong>Puesto: </strong>{{ persona.puesto }}</li>
+                                    <li><strong>Código de Puesto: </strong>{{ persona.puesto.codigo_puesto }}</li>
+                                    <li><strong>Nivel Y Rango: </strong>{{ persona.puesto.nivel_rango }}</li>
+                                    <li><strong>Sueldo Bruto: </strong> $ {{ persona.puesto.sueldo_bruto }}</li>
+                                    <li><strong>Sueldo Neto: </strong>$ {{ persona.puesto.sueldo_neto }}</li>
+                                    <br>
+
+                                    <h4 class="resume-section-title text-uppercase font-weight-bold pb-3 ">Adscripción Física</h4>
+                                    <li><strong>Unidad Administrativa: </strong>{{ persona.unidad_administrativa|default_if_none:'' }}</li>
+                                    {% if persona.adscripcion %}
+                                        <li><strong>Adscripción: </strong> {{persona.adscripcion}}</li>
+                                    {% endif %}
+                                    {% if persona.direccion %}
+                                        <li><strong>Dirección: </strong> {{persona.direccion}}</li>
+                                    {% endif %}
+                                    {% if persona.subdireccion %}
+                                        <li><strong>Subdirección: </strong> {{persona.subdireccion}}</li>
+                                    {% endif %}
+                                    {% if persona.departamento %}
+                                        <li><strong>Departamento: </strong> {{persona.departamento}}</li>
+                                    {% endif %}
+                                    <br>
+                                    {% if persona.observaciones|length > 0 or persona.motivo_baja|length > 0 or persona.lugar_comision|length > 0%}
+                                        <h4 class="resume-section-title text-uppercase font-weight-bold pb-3 ">Notas</h4>
+                                        {% if persona.observaciones|length > 0 %}
+                                            <li><strong>Observaciones: </strong>{{ persona.observaciones}}</li>
+                                        {% endif %}
+                                        {% if persona.motivo_baja|length > 0 %}
+                                            <li><strong>Fecha y Motivo de Baja: </strong> {{ persona.motivo_baja}}</li>
+                                        {% endif %}
+                                        {% if persona.lugar_comision|length > 0 %}
+                                            <li><strong>Lugar de Comisión: </strong> {{ persona.lugar_comision}}</li>
+                                        {% endif %}
+                                    {% endif %}
+                                    <br>
+
+                                    <h4 class="resume-section-title text-uppercase font-weight-bold pb-3 ">Contacto</h4>
+                                    <li><strong>Correo Electrónico: </strong> {{persona.correo|default_if_none:'Sin Información'}}</li>
+                                    <li><strong>Número Fijo: </strong> {{ persona.telefono_fijo|default_if_none:'Sin Información' }}</li>
+                                    <li><strong>Número Móvil: </strong> {{ persona.telefono_movil|default_if_none:'Sin Información' }}</li>                
+                                    <li><strong>Contacto Familiar: </strong>{{ persona.contacto_familiar|default_if_none:'Sin Información' }}</li>
+                                    <li><strong>ISSEMYM: </strong>{{ persona.nss|default_if_none:'Sin Información' }}</li>
+                                    <li><strong>Tipo de Sangre: </strong>{{ persona.tipo_sangre|default_if_none:'Sin Información' }}</li>
+                                    <li><strong>Escolaridad: </strong>{{ persona.escolaridad|default_if_none:'Sin Información' }}</li>
+                                    <br>
+
+                                    <h4 class="resume-section-title text-uppercase font-weight-bold pb-3 ">Domicilio</h4>
+                                    <li><strong>Calle </strong> {{persona.calle|default_if_none:'Sin Información'}}</li>
+                                    {% if persona.exterior|length > 0 %}
+                                        <li><strong>Número: </strong> {{ persona.exterior}}</li>
+                                    {% endif %}
+                                    {% if persona.interior|length > 0 %}
+                                        <li><strong>Interior: </strong> {{ persona.interior|default_if_none:'Sin Información' }}</li>                
+                                    {% endif %}
+                                    <li><strong>Colonia: </strong>{{ persona.colonia|default_if_none:'Sin Información' }}</li>
+                                    <li><strong>Municipio: </strong>{{ persona.municipio|default_if_none:'Sin Información' }}</li>
+                                    <li><strong>Código Postal: </strong>{{ persona.cp|default_if_none:'Sin Información' }}</li>
+                                    
+                                </div><!--//resume-timeline-item-header-->
+                            </article><!--//resume-timeline-item-->
+                       </div>
+                    </div>
+                </section><!--//experience-section-->
+            </div><!--//col-->
+            
+            <div class="col mb-2 ml-2 mr-2">
+
+                <!--CURSOS-->
+                {% if cursos|length > 0 %}
+                    <div class="col">
+                        <div class="row rounded bg-dark">
+                            <div class="col"></div>
+                            <div class="col-auto text-center"><h6 class="mt-2 text-white " ><strong> CURSOS </strong></h6></div>
+                            <div class="col"></div>
+                        </div>
+                        <br>
+                        <section class="resume-section experience-section mb-4">
+                            <div class="resume-section-content">
+                                <div class="resume-timeline position-relative">
+                                    <article class="resume-timeline-item position-relative">
+                                        <div class="resume-timeline-item-header mb-2">
+                                            {% for curso in cursos %}
+                                            <li class="text-uppercase"> <strong> {{curso.tipo_curso}} </strong> {{ curso.nombre}} </li>
+                                            <!-- <strong> Duración: </strong> {{ curso.horas}}  HORAS</li> -->
+                                            <li> <i class='fas fa-school'></i> {{ curso.institucion|default_if_none:'Sin dato' }} </li>
+                                            <li> <i class='fas fa-business-time'></i> {{curso.horas}} horas. </li>
+                                            <hr>
+                                            {% endfor %}
+                                        </div>
+                                    </article>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                {% endif %}
+
+                <!--VEHÍCULOS-->
+                {% if vehiculos|length > 0 %}
+                    <div class="col">
+                        <div class="row rounded bg-dark">
+                            <div class="col"></div>
+                            <div class="col-auto text-center"><h6 class="mt-2 text-white " ><strong> VEHÍCULOS </strong></h6></div>
+                            <div class="col"></div>
+                        </div>
+                        <br>
+                        <section class="resume-section experience-section mb-4">
+                            <div class="resume-section-content">
+                                <div class="resume-timeline position-relative">
+                                    <article class="resume-timeline-item position-relative">
+                                        <div class="resume-timeline-item-header mb-2">
+
+                                            {% for vehiculo in vehiculos %}
+                                                <li class="text-uppercase"> <strong> Vehículo: </strong> 
+                                                    {% if vehiculo.marca %}
+                                                        {{ vehiculo.marca }} |
+                                                    {% endif %}
+                                                    {% if vehiculo.submarca %}
+                                                        {{vehiculo.submarca}} |
+                                                    {% endif %}
+                                                    {% if vehiculo.modelo %}
+                                                        {{vehiculo.modelo}} |
+                                                    {% endif %}
+                                                    {% if vehiculo.color %} 
+                                                        {{vehiculo.color}}. 
+                                                    {% endif %}
+                                                </li> 
+                                                {% if vehiculo.matricula %}
+                                                    <li class="text-uppercase">
+                                                        <strong>Placas de circulación:</strong> {{vehiculo.matricula}}.
+                                                    </li>  
+                                                {% endif %}
+                                                {% if vehiculo.resguardo %}
+                                                    <li class="text-uppercase">
+                                                        <strong>Resguardo:</strong>{{vehiculo.resguardo}}.
+                                                    </li>   
+                                                {% endif %}
+                                                
+                                                <hr>
+                                            {% endfor %}
+                                        </div>
+                                    </article>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    
+                {% endif %}
+                {% if armas|length > 0 %}
+                    <div class="col">
+                        <div class="row rounded bg-dark">
+                            <div class="col"></div>
+                            <div class="col-auto text-center"><h6 class="mt-2 text-white " ><strong> ARMAS </strong></h6></div>
+                            <div class="col"></div>
+                        </div>
+                        <br>
+                        <section class="resume-section experience-section mb-4">
+                            <div class="resume-section-content">
+                                <div class="resume-timeline position-relative">
+                                    <article class="resume-timeline-item position-relative">
+                                        <div class="resume-timeline-item-header mb-2">
+                                            {% for arma in armas %}
+                                                <li class="text-uppercase"> <strong> Armamento: </strong> {{ arma.clase }} marca {{arma.marca}} calibre {{arma.calibre}}, modelo {{arma.modelo}}.
+                                                </li> 
+                                                <li class="text-uppercase"> <strong>Matrícula:</strong> {{ arma.matricula}}.
+                                                </li> 
+                                                <li class="text-uppercase"> <strong> No. de resguardo: </strong> {{arma.resguardo}}. 
+                                                </li> 
+                                                <hr>
+                                            {% endfor %}
+                                        </div>
+                                    </article>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                {% endif %}
+                {% if bienes|length > 0 %}
+                    <div class="col">
+                        <div class="row rounded bg-dark">
+                            <div class="col"></div>
+                            <div class="col-auto text-center"><h6 class="mt-2 text-white " ><strong> BIENES </strong></h6></div>
+                            <div class="col"></div>
+                        </div>
+                        <br>
+                        <section class="resume-section experience-section mb-4">
+                            <div class="resume-section-content">
+                                <div class="resume-timeline position-relative">
+                                    <article class="resume-timeline-item position-relative">
+                                        <div class="resume-timeline-item-header mb-2">
+                                            {% for bien in bienes %}
+                                                <li class="text-uppercase"> <strong> Categoria: </strong> {{ bien.categoria }} <strong>| Estatus:</strong> {{bien.estatus_bien}}</li> 
+                                                <li class="text-uppercase"> <strong> Descripción: </strong> {{ bien.descripcion }}.</li> 
+                                                <li class="text-uppercase"> <strong> Resguardatario: </strong> {{ bien.resguardatario }}.</li> 
+                                                <li class="text-uppercase"> <strong> Usuario: </strong> {{ bien.usuario }}.</li> 
+                                            {% endfor %}
+                                        </div>
+                                    </article>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                {% endif %}
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card-footer bg-dark pd-4">
+        <h6 class="name text-center text-white" ><strong>Última actualización por usuario con id <!-- {{ persona.user|default_if_none:"Admin" }} --> {{ persona.user.id }}, el {{persona.modified}} hrs.</strong></h6>
+    </div>
+        
+</div>
+        
+{% endblock %} 
+
+

@@ -1,0 +1,334 @@
+{% extends 'skin.html' %}
+{% load static %}
+{% block head_body %}
+ 
+    <link rel="shortcut icon" href="favicon.ico"> 
+    
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+    
+    <!-- FontAwesome JS-->
+	<script defer src="/static/assets/fontawesome/js/all.min.js"></script>
+       
+    <!-- Theme CSS -->  
+    <link id="theme-style" rel="stylesheet" href="/static/assets/css/pillar-1.css">
+
+{% endblock %}
+
+{% block content %}
+    <div class="card card-primary">
+        <div class="card-header">
+            <h2 class="card-title">
+                <i class="fas fa-user"></i>
+                FICHA CANDIDATO
+            </h2>
+            
+            <a href="{{request.META.HTTP_REFERER}}" class="btn bg-gradient-danger btn-round float-right">
+                <i class="fas fa-backward"></i> Atras
+            </a>
+        </div>
+        <div class="row ">
+            <div class="col-2"></div>
+                {% if candidato.estatus_candidato == 'Presidente Municipal' or candidato.estatus_candidato == 'Presidenta Municipal'   %}
+                    <div class="col-8 text-center"><h3 class="mt-1 text-dark" > {{candidato.municipio}}</h3></div>
+                {% elif candidato.estatus_candidato == 'Diputado Local' or candidato.estatus_candidato == 'Diputada Local'%}
+                    <div class="col-8 text-center"><h3 class="mt-1 text-dark" >DISTRITO {{ candidato.distrito_local.id }}. {{candidato.distrito_local.nombre}}</h3></div>
+                {% elif candidato.estatus_candidato == 'Diputado Federal' or candidato.estatus_candidato == 'Diputada Federal'  %}
+                    <div class="col-8 text-center"><h3 class="mt-1 text-dark" > {{candidato.distrito_federal.nombre}}</h3></div>
+                {% endif %}
+            <div class="col-2 text-center"><h5 class="ml-6 mt-1 text-white" >ID {{ candidato.id }}</h5></div>
+        </div>
+
+		    <header class="resume-header pt-4 pt-md-0">
+			    <div class="row">
+				    <div class="col-block col-md-auto resume-picture-holder text-center text-md-start">
+				        {% if candidato.foto %}
+                            <a href="">
+                                <img src=" {{ candidato.foto.url }}" alt="{{candidato.nombre}}" class=" img-thumbnail rounded border img-fluid"  style = "width:185px; height: 220px"  >
+                            </a>
+                        {% else %}
+                            <img src="{% static "img/user1.png" %}" class=" rounded border img-fluid"  style = "width:185px; height: 220px" />
+                        {% endif %}
+				    </div><!--//col-->
+				    <div class="col">
+					    <div class="row p-6 justify-content-center justify-content-md-between">
+						    <div class="primary-info col-auto">
+							    <h5 class="name mt-0 mb-1 text-white text-uppercase text-uppercase">{{candidato.nombre}} {{candidato.apaterno}} {{candidato.amaterno}}</h5>
+							    <div class="title mb-3"> {{candidato.estatus_candidato}} ({{candidato.periodo}}) </div>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="fas fa-birthday-cake me-2	" data-fa-transform="grow-3"></i>   {{candidato.fecha_nacimiento}}</li>
+                                    <li class="mb-2"><i class="far fa-calendar-alt me-2" data-fa-transform="grow-3"></i>  {{ candidato.get_edad}} años</li>
+								    {%  if candidato.correo|length > 0 %}
+                                        <li class="mb-2"><i class="far fa-envelope fa-fw me-2" data-fa-transform="grow-3"></i>{{candidato.correo}}</li>
+                                    {% endif %}
+									{% if candidato.facebook|length > 0 %}
+								    	<li class="mb-2"><i class="fab fa-facebook-square me-2" data-fa-transform="grow-6"></i>{{candidato.facebook}}</a></li>
+									{% endif %}
+							    </ul>
+						    </div><!--//primary-info-->
+						    <div class="secondary-info col-auto mt-2">
+							    <ul class="resume-social list-unstyled">
+					                <li class="mb-3 mr-5"><span class="fa-container text-center me-2"><i class="fas fa-user-tie	"></i></span>{{candidato.partido}}</li>
+                                    <img src=" {{ candidato.partido.foto.url }}" alt="{{candidato.partido}}" class=" img-thumbnail rounded border img-fluid" width="150"  >
+					                
+							    </ul>
+						    </div><!--//secondary-info-->
+					    </div><!--//row-->
+					    
+				    </div><!--//col-->
+			    </div><!--//row-->
+		    </header>
+            
+		    <div class="resume-body p-5">
+			    <section class="resume-section summary-section mb-5">
+				    <div class="resume-section-content">
+					    {% if candidato.estatus_candidato == 'Diputado Local' or candidato.estatus_candidato == 'Diputada Local'%}
+							<h6><strong>Municipios que abarca: 
+							{% for distritos in distritos_locales %}
+								{% if distritos.distrito_local_id == candidato.distrito_local.id %}
+									<li>{{ distritos.cabecera }}
+								{% endif %}
+							{% endfor %} 
+							</strong></h6>
+						{% elif candidato.estatus_candidato == 'Diputado Federal' or candidato.estatus_candidato == 'Diputada Federal'%}
+							<h6><strong>Municipios que abarca: 
+							{% for distritos in distritos_federales %}
+								{% if distritos.distrito_federal_id == candidato.distrito_federal.id %}
+										{% for mun in municipios  %}
+											{% if distritos.municipio_id == mun.id %}
+											<li> {{ mun.nombre }}
+											{% endif %}
+										{% endfor %}
+								{% endif %}
+							{% endfor %} 
+							</strong></h6>
+                		{%endif%}
+
+				    </div>
+			    </section><!--//summary-section-->
+			    <div class="row">
+				    <div class="col-lg-9">
+					    <section class="resume-section experience-section mb-5">
+						    <h2 class="resume-section-title text-uppercase font-weight-bold pb-3 mb-3">Datos Generales</h2>
+						    <div class="resume-section-content">
+							    <div class="resume-timeline position-relative">
+								    <article class="resume-timeline-item position-relative pb-5">
+									    
+									    <div class="resume-timeline-item-header mb-2">
+										    <div class="d-flex flex-column flex-md-row">
+										        <h3 class="resume-position-title font-weight-bold mb-1">RFC</h3>
+										    </div><!--//row-->
+											<ul><li>{{candidato.rfc}}</li></ul>
+											<div class="d-flex flex-column flex-md-row">
+										        <h3 class="resume-position-title font-weight-bold mb-1">CURP</h3>
+										    </div><!--//row-->
+											<ul><li>{{candidato.curp}}</li></ul>
+											{% if candidato.estado_civil|length > 0 %}
+												<div class="d-flex flex-column flex-md-row">
+										        	<h3 class="resume-position-title font-weight-bold mb-1">Estado Cívil</h3>
+										    	</div><!--//row-->
+												<ul><li>{{candidato.estado_civil}}</li></ul>
+											{% endif %}
+											{% if candidato.direccion|length > 0 %}
+												<div class="d-flex flex-column flex-md-row">
+													<h3 class="resume-position-title font-weight-bold mb-1">Domicilio</h3>
+												</div><!--//row-->
+												<ul><li>{{candidato.direccion}}</li></ul>
+											{% endif %}
+											{% if candidato.vehiculo|length > 0 %}
+												<div class="d-flex flex-column flex-md-row">
+													<h3 class="resume-position-title font-weight-bold mb-1">Domicilio</h3>
+												</div><!--//row-->
+												<ul><li>{{candidato.vehiculo}}</li></ul>
+                							{% endif %}
+											{% if candidato.telefono_fijo|length > 0 %}
+												<div class="d-flex flex-column flex-md-row">
+													<h3 class="resume-position-title font-weight-bold mb-1">Teléfono Fijo</h3>
+												</div><!--//row-->
+												<ul><li>{{candidato.telefono_fijo}}<li></ul>
+											{% endif %}
+											{% if candidato.telefono_movil|length > 0 %}
+												<div class="d-flex flex-column flex-md-row">
+													<h3 class="resume-position-title font-weight-bold mb-1">Teléfono Móvil</h3>
+												</div><!--//row-->
+												<ul><li>{{candidato.telefono_movil}}</li></ul>
+											{% endif %}
+											{% if candidato.escolaridad|length > 0 %}
+												<div class="d-flex flex-column flex-md-row">
+													<h3 class="resume-position-title font-weight-bold mb-1">Formación Acádemica</h3>
+												</div><!--//row-->
+												<ul><li>{{candidato.escolaridad}}</li></ul>
+											{% endif %}
+											{% if candidato.cargos_ocupados|length > 0 %}
+                    							<div class="d-flex flex-column flex-md-row">
+													<h3 class="resume-position-title font-weight-bold mb-1">Cargos Ocupados</h3>
+												</div><!--//row-->
+												<ul><li><p class="text-justify">{{candidato.cargos_ocupados}}</p></li></ul>	
+											{% endif %}
+											{% if candidato.cargos_ocupados|length > 0 %}
+                    							<div class="d-flex flex-column flex-md-row">
+													<h3 class="resume-position-title font-weight-bold mb-1">Cargos Ocupados</h3>
+												</div><!--//row-->
+												<ul><li><p class="text-justify">{{candidato.cargos_ocupados}}</p></li></ul>	
+											{% endif %}
+
+										</div><!--//resume-timeline-item-header-->
+									</article><!--//resume-timeline-item-->
+								    
+								</div>
+						    </div>
+					    </section><!--//experience-section-->
+				    </div>
+				    <div class="col-lg-3">
+					    <section class="resume-section skills-section mb-5">
+						    
+						    <div class="resume-section-content">
+						        <div class="resume-skill-item">
+							        <h4 class="resume-skills-cat font-weight-bold">Riesgo</h4>
+							        <ul class="list-unstyled mb-4">
+								        <li class="mb-2">
+								            <div class="resume-skill-name">{{candidato.riesgo}}</div>
+									        <div class="progress resume-progress">
+											    <div class="progress-bar theme-progress-bar-dark" role="progressbar" style="width: 50%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+								        </li>
+								        <li class="mb-2">
+								            <div class="resume-skill-name">React</div>
+									        <div class="progress resume-progress">
+											    <div class="progress-bar theme-progress-bar-dark" role="progressbar" style="width: 94%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+								        </li>
+								        <li class="mb-2">
+								            <div class="resume-skill-name">JavaScript</div>
+									        <div class="progress resume-progress">
+											    <div class="progress-bar theme-progress-bar-dark" role="progressbar" style="width: 96%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+								        </li>
+								        
+								        <li class="mb-2">
+								            <div class="resume-skill-name">Node.js</div>
+									        <div class="progress resume-progress">
+											    <div class="progress-bar theme-progress-bar-dark" role="progressbar" style="width: 92%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+								        </li>
+								        <li class="mb-2">
+								            <div class="resume-skill-name">HTML/CSS/SASS/LESS</div>
+									        <div class="progress resume-progress">
+											    <div class="progress-bar theme-progress-bar-dark" role="progressbar" style="width: 96%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+								        </li>
+							        </ul>
+						        </div><!--//resume-skill-item-->
+						        
+						        <div class="resume-skill-item">
+						            <h4 class="resume-skills-cat font-weight-bold">Backend</h4>
+							        <ul class="list-unstyled">
+								        <li class="mb-2">
+								            <div class="resume-skill-name">Python/Django</div>
+									        <div class="progress resume-progress">
+											    <div class="progress-bar theme-progress-bar-dark" role="progressbar" style="width: 95%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+								        </li>
+								        <li class="mb-2">
+								            <div class="resume-skill-name">Ruby/Rails</div>
+									        <div class="progress resume-progress">
+											    <div class="progress-bar theme-progress-bar-dark" role="progressbar" style="width: 92%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+								        </li>
+								        <li class="mb-2">
+								            <div class="resume-skill-name">PHP</div>
+									        <div class="progress resume-progress">
+											    <div class="progress-bar theme-progress-bar-dark" role="progressbar" style="width: 86%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+								        </li>
+								        <li class="mb-2">
+								            <div class="resume-skill-name">WordPress/Shopify</div>
+									        <div class="progress resume-progress">
+											    <div class="progress-bar theme-progress-bar-dark" role="progressbar" style="width: 82%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+								        </li>
+							        </ul>
+						        </div><!--//resume-skill-item-->
+						        
+						        <div class="resume-skill-item">
+						            <h4 class="resume-skills-cat font-weight-bold">Others</h4>
+						            <ul class="list-inline">
+							            <li class="list-inline-item"><span class="badge badge-light">DevOps</span></li>
+							            <li class="list-inline-item"><span class="badge badge-light">Code Review</span></li>
+							            <li class="list-inline-item"><span class="badge badge-light">Git</span></li>
+							            <li class="list-inline-item"><span class="badge badge-light">Unit Testing</span></li>
+							            <li class="list-inline-item"><span class="badge badge-light">Wireframing</span></li>
+							            <li class="list-inline-item"><span class="badge badge-light">Sketch</span></li>
+							            <li class="list-inline-item"><span class="badge badge-light">Balsamiq</span></li>
+							            <li class="list-inline-item"><span class="badge badge-light">WordPress</span></li>
+							            <li class="list-inline-item"><span class="badge badge-light">Shopify</span></li>
+						            </ul>
+						        </div><!--//resume-skill-item-->
+						    </div><!--resume-section-content-->
+					    </section><!--//skills-section-->
+					    <section class="resume-section education-section mb-5">
+						    <h2 class="resume-section-title text-uppercase font-weight-bold pb-3 mb-3">Education</h2>
+						    <div class="resume-section-content">
+							    <ul class="list-unstyled">
+								    <li class="mb-2">
+								        <div class="resume-degree font-weight-bold">MSc in Computer Science</div>
+								        <div class="resume-degree-org">University College London</div>
+								        <div class="resume-degree-time">2010 - 2011</div>
+								    </li>
+								    <li>
+								        <div class="resume-degree font-weight-bold">BSc Maths and Physics</div>
+								        <div class="resume-degree-org">Imperial College London</div>
+								        <div class="resume-degree-time">2007 - 2010</div>
+								    </li>
+							    </ul>
+						    </div>
+					    </section><!--//education-section-->
+					    <section class="resume-section reference-section mb-5">
+						    <h2 class="resume-section-title text-uppercase font-weight-bold pb-3 mb-3">Awards</h2>
+						    <div class="resume-section-content">
+							    <ul class="list-unstyled resume-awards-list">
+								    <li class="mb-2 ps-4 position-relative">
+								        <i class="resume-award-icon fas fa-trophy position-absolute" data-fa-transform="shrink-2"></i>
+								        <div class="resume-award-name">Award Name Lorem</div>
+								        <div class="resume-award-desc">Award desc goes here, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo.</div>
+								    </li>
+								    <li class="mb-0 ps-4 position-relative">
+								        <i class="resume-award-icon fas fa-trophy position-absolute" data-fa-transform="shrink-2"></i>
+								        <div class="resume-award-name">Award Name Ipsum</div>
+								        <div class="resume-award-desc">Award desc goes here, ultricies nec, pellentesque.</div>
+								    </li>
+							    </ul>
+						    </div>
+					    </section><!--//interests-section-->
+					    <section class="resume-section language-section mb-5">
+						    <h2 class="resume-section-title text-uppercase font-weight-bold pb-3 mb-3">Language</h2>
+						    <div class="resume-section-content">
+							    <ul class="list-unstyled resume-lang-list">
+								    <li class="mb-2"><span class="resume-lang-name font-weight-bold">English</span> <small class="text-muted font-weight-normal">(Native)</small></li>
+								    <li class="mb-2 align-middle"><span class="resume-lang-name font-weight-bold">French</span> <small class="text-muted font-weight-normal">(Professional)</small></li>
+								    <li><span class="resume-lang-name font-weight-bold">Spanish</span> <small class="text-muted font-weight-normal">(Professional)</small></li>
+							    </ul>
+						    </div>
+					    </section><!--//language-section-->
+					    <section class="resume-section interests-section mb-5">
+						    <h2 class="resume-section-title text-uppercase font-weight-bold pb-3 mb-3">Interests</h2>
+						    <div class="resume-section-content">
+							    <ul class="list-unstyled">
+								    <li class="mb-1">Climbing</li>
+								    <li class="mb-1">Snowboarding</li>
+								    <li class="mb-1">Cooking</li>
+							    </ul>
+						    </div>
+					    </section><!--//interests-section-->
+					    
+				    </div>
+			    </div><!--//row-->
+		    </div><!--//resume-body-->
+		    
+		    
+	    </div>
+    </div> 
+
+
+{% endblock %}
+

@@ -1,0 +1,938 @@
+{% extends 'skin.html' %}
+{% load static %}
+{% block head_body %}
+    <link rel="shortcut icon" href="favicon.ico"> 
+        
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+
+    <!-- FontAwesome JS-->
+    <script defer src="/static/assets/fontawesome/js/all.min.js"></script>
+    
+    <!-- Theme CSS -->  
+    <link id="theme-style" rel="stylesheet" href="/static/assets/css/pillar-1.css">
+        <!--Block head list-->
+    <style>
+    .abs-center {
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+        }
+    </style>
+    {% block head_list %}{% endblock %}
+{% endblock %}
+{% block content%}
+<div class="card card-primary">
+    <div class="card-header">
+        <div class="row">
+            <div class="col">
+                <h2 class="card-title mt-2">
+                    <i class="fas fa-user"></i>
+                    FICHA LÍDER SOCIAL
+                </h2>
+            </div>
+            <div class="col">
+                <a href="" target="_blank" class="ml-1 btn bg-gradient-primary btn-round float-right">
+                    <i class="fas fa-file-pdf"></i> Generar PDF
+                </a>
+                <a href="{{request.META.HTTP_REFERER}}" class="btn bg-gradient-danger btn-round float-right">
+                    <i class="fas fa-backward"></i> Atras
+                </a>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+
+    <div class="card-body bg-gradient-light rounded text-dark align-middle">   
+           
+        <!--ENCABEZADO-->   
+        <div class="row rounded bg-secondary align-items-center">
+            <div class="col">
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col-auto"><h4 class="mt-2 text-white text-center" ><strong>{{lider.nombre}} {{lider.apaterno}} {{lider.amaterno}}</strong></h4></div>
+                    <div class="col"></div>
+                </div>
+
+                <div class="col-auto">
+                {% if lider.organizaciones.all|length > 0 %}
+                    <div class="row">
+                        <h6 class="mt-2 text-white text-center" > <strong> ({{lider.organizaciones.first}}) </strong> </h6>
+                     </div>
+                {% endif %}
+                </div>
+                <div class="col-auto">
+                    {% if lider.puesto_ocupado %}
+                        <div class="row">
+                            <div class="col"></div>
+                            <div class="col-auto"><h6 class="mt-2 text-white text-center" > <strong> {{lider.puesto_ocupado}} </strong> </h6></div>
+                            <div class="col"></div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <hr>
+
+                <div class="row">
+                    <div class="col abs-center">
+                        <div class="col-5">
+                            {%if lider.poder_convocatoria == 'Bajo'%}
+                                <div class="progress resume-progress">
+                                    <div class="progress-bar theme-progress-bar bg-success rounded" role="progressbar" style="width: 33.3%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            {% elif lider.poder_convocatoria == 'Medio' %}
+                                <div class="progress resume-progress">
+                                    <div class="progress-bar theme-progress-bar bg-warning rounded" role="progressbar" style="width: 66.6%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            {% elif lider.poder_convocatoria == 'Alto' %}
+                                <div class="progress resume-progress">
+                                    <div class="progress-bar theme-progress-bar bg-danger" role="progressbar" style="width: 99.9%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            {% endif %}
+                                <div class="row">
+                                    <div class="col abs-center"><h6 class="text-white">Poder de convocatoria: {{lider.poder_convocatoria}} </h6></div>
+                                </div>
+                        </div>
+                        <div class="col-5">
+                            {%if lider.riesgo == 'Bajo'%}
+                                <div class="progress resume-progress">
+                                    <div class="progress-bar theme-progress-bar bg-success rounded" role="progressbar" style="width: 33.3%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            {% elif lider.riesgo == 'Medio' %}
+                                <div class="progress resume-progress">
+                                    <div class="progress-bar theme-progress-bar bg-warning rounded" role="progressbar" style="width: 66.6%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            {% elif lider.riesgo == 'Alto' %}
+                                <div class="progress resume-progress">
+                                    <div class="progress-bar theme-progress-bar bg-danger" role="progressbar" style="width: 99.9%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            {% endif %}
+                                <div class="row">
+                                    <div class="col abs-center"><h6 class="text-white">Riesgo: {{lider.riesgo}} </h6></div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            {% if lider.foto %}
+                <div class="col-2 m-2">
+                    <img src=" {{ lider.foto.url }}" alt="{{lider.nombre}}" class=" img-thumbnail rounded border-2 border-dark mr-5" style="height: 165px;">
+                </div>  
+            {% else %}
+                <div class="col-2 m-2">
+                    <img src=" {% static "/img/user1.png" %}" alt="{{lider.nombre}}" class=" img-thumbnail rounded border-2 border-dark mr-5" style="height: 165px;">
+                </div>
+            {% endif %}
+        </div>
+        <hr>        
+        <!-- DATOS GENERALES-->
+        <div class="row">
+            <div class="col-2 bg-secondary border border-white rounded abs-center">
+                <div class="text-center"><span class="text-white"><strong>Datos Personales</strong></span></div>
+            </div>
+            <div class="col">
+                {% if lider.nombre|length > 0 %} 
+                    <div class="row">
+                        <div class="col-3 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><strong>Nombre</strong></span>
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <span class="ml-2">{{lider.nombre}} {{lider.apaterno}} {{lider.amaterno}} </span>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if lider.alias|length > 0 %} 
+                    <div class="row">
+                        <div class="col-3 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><strong>Alias</strong></span>
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <span class="ml-2">{{lider.alias}}</span>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if lider.fecha_nacimiento|length > 0 %}
+                    <div class="row">
+                        <div class="col-3 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><strong>Fecha de Nacimiento</strong></span>
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <span class="ml-2">{{lider.fecha_nacimiento}} </span>
+                        </div>
+                    </div>    
+                {% endif %}
+
+                {% if lider.lugar_nacimiento|length > 0 %}
+                    <div class="row">
+                        <div class="col-3 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><strong>Lugar de Nacimiento</strong></span>
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <span class="ml-2">{{lider.lugar_nacimiento}} </span>
+                        </div>
+                    </div>    
+                {% endif %}
+
+                {% if lider.nacionalidad|length > 0 %}
+                    <div class="row">
+                        <div class="col-3 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><strong>Nacionalidad</strong></span>
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <p class="text-justify m-2" ><span> {{lider.nacionalidad}} </span></p>
+                        </div>
+                    </div>    
+                {% endif %}
+
+                {% if lider.rfc|length > 0 %}
+                    <div class="row">
+                        <div class="col-3 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><strong>RFC</strong></span>
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <span class="ml-2"> {{lider.rfc }} </span>
+                        </div>
+                    </div>    
+                {% endif %}
+
+                {% if lider.curp|length > 0 %}
+                    <div class="row">
+                        <div class="col-3 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><strong>CURP</strong></span>
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <span class="ml-2"> {{lider.curp}} </span>
+                        </div>
+                    </div>    
+                {% endif %}
+
+                {% if lider.estado_civil|length > 0 %}
+                    <div class="row">
+                        <div class="col-3 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><strong>Estado Civil</strong></span>
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <span class="ml-2"> {{lider.estado_civil}} </span>
+                        </div>
+                    </div>    
+                {% endif %}
+
+                {% if lider.domicilio_particular|length > 0 %}
+                    <div class="row">
+                        <div class="col-3 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><strong>Domicilio Particular</strong></span>
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <p class="text-justify m-2"><span> {{lider.domicilio_particular}}</span>
+                        </div>
+                    </div>    
+                {% endif %}
+
+                {% if lider.telefono_particular|length > 0 %}
+                    <div class="row">
+                        <div class="col-3 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><strong>Teléfono Particular</strong></span>
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <span class="ml-2"> {{lider.telefono_particular}}</span>
+                        </div>
+                    </div>    
+                {% endif %}
+
+                {% if lider.domicilio_laboral|length > 0 %}
+                    <div class="row">
+                        <div class="col-3 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><strong>Domicilio Laboral</strong></span>
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <p class="text-justify m-2"><span> {{lider.domicilio_laboral}}</span>
+                        </div>
+                    </div>    
+                {% endif %}
+
+                {% if lider.telefono_trabajo|length > 0 %}
+                    <div class="row">
+                        <div class="col-3 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><strong>Teléfono Laboral</strong></span>
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <span class="ml-2"> {{lider.telefono_trabajo}}</span>
+                        </div>
+                    </div>    
+                {% endif %}
+
+                {% if lider.correo|length > 0 %}
+                    <div class="row">
+                        <div class="col-3 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><strong>Correo Electrónico</strong></span>
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <span class="ml-2"> {{lider.correo}}</span>
+                        </div>
+                    </div>    
+                {% endif %}
+            
+            </div>
+        </div>
+        {% if lider.zona_influencia|length > 0 %} 
+            <div class="row">
+                <div class="col-2 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Zona de Influencia</strong></span></div>
+                </div>
+                <div class="col">
+
+                        <div class="row">
+                            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                                <span class="text-white"><strong><i class='fas fa-globe-americas	'></i></strong></span>
+                            </div>
+                            <div class="col rounded border border-white col-color">
+                                <p class="text-justify m-2"><span>{{lider.zona_influencia}} </span> </p>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            {% endif %}
+
+        <!-- REDES SOCIALES-->
+        {% if lider.facebook|length > 0 or lider.instagram|length > 0  or lider.twitter|length > 0 %}
+            <div class="row">
+                <div class="col-2 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Redes Sociales</strong></span></div>
+                </div>
+                <div class="col">
+                    {% if lider.facebook|length > 0 %}
+                        <div class="row">
+                            <div class="col-3 abs-center bg-secondary rounded border border-white">
+                                <span class="text-white"><i class='fab fa-facebook'></i><strong> Facebook </strong></span>
+                            </div>
+                            <div class="col col-color rounded border border-white">
+                                <p class="text-justify m-2"><span>{{lider.facebook}}</span></p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if lider.instagram|length > 0 %}
+                        <div class="row">
+                            <div class="col-3 abs-center bg-secondary rounded border border-white">
+                                <span class="text-white"><i class='fab fa-instagram'></i><strong> Instagram  </strong></span>
+                            </div>
+                            <div class="col col-color rounded border border-white">
+                                <p class="text-justify m-2"><span>{{lider.instagram}}</span></p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if lider.twitter|length > 0 %}
+                        <div class="row">
+                            <div class="col-3 abs-center bg-secondary rounded border border-white">
+                                <span class="text-white"><i class='fab fa-twitter'></i><strong> Twitter </strong></span>
+                            </div>
+                            <div class="col col-color rounded border border-white">
+                                <p class="text-justify m-2"><span>{{lider.twitter}}</span></p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+            </div>
+        {% endif %}  
+
+        <!-- FORMACIÓN ACADEMICA -->
+        {% if lider.formacion_academica%} 
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Formación Academica</strong></span></div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col-2 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><i class='fas fa-school'></i></span> 
+                        </div>
+                        <div class="col rounded bg-ligth border-bottom border">
+                            <p class="text-justify m-2" ><span> {{lider.formacion_academica}} </span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- FAMILIARES-->
+        {% if lider.padres|length > 0 or lider.conyuge|length > 0 or lider.hijos|length > 0 or lider.otros|length > 0 %}
+            <div class="row">
+                
+                <div class="col-2 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Familiares</strong></span></div>
+                </div>
+
+                <div class="col">
+                    {% if lider.padres|length > 0 %}
+                        <div class="row">
+                            <div class="col-3 abs-center bg-secondary rounded border border-white">
+                                <span class="text-white"><strong> Padres </strong></span>
+                            </div>
+                            <div class="col col-color rounded border border-white">
+                                <p class="text-justify m-2"><span>{{lider.padres}}</span></p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if lider.conyuge|length > 0 %}
+                        <div class="row">
+                            <div class="col-3 abs-center bg-secondary rounded border border-white">
+                                <span class="text-white"><strong>Conyuge</strong></span>
+                            </div>
+                            <div class="col col-color rounded border border-white">
+                                <p class="text-justify m-2"><span>{{lider.conyuge}}</span></p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if lider.hijos|length > 0 %}
+                        <div class="row">
+                            <div class="col-3 abs-center bg-secondary rounded border border-white">
+                                <span class="text-white"><strong>Hijos</strong></span>
+                            </div>
+                            <div class="col col-color rounded border border-white">
+                                <p class="text-justify m-2"><span>{{lider.hijos}}</span></p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if lider.otros|length > 0 %}
+                        <div class="row">
+                            <div class="col-3 abs-center bg-secondary rounded border border-white">
+                                <span class="text-white"><strong>Otros</strong></span>
+                            </div>
+                            <div class="col col-color rounded border border-white">
+                                <p class="text-justify m-2"><span>{{lider.otros}}</span></p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %} 
+
+        <!-- ANTECENTES organizaXION-->
+        
+        {% if lider.organizaciones.first|length > 0 or lider.puesto_ocupado|length > 0 or lider.periodo|length > 0 %} 
+            <div class="row">
+
+                <div class="col-2 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Organización</strong></span></div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col-3 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><strong>Organización</strong></span>
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <p class="text-justifty mt-3"><span class="ml-2">{{ lider.organizaciones.first }} / {{lider.organizaciones.first.tipo_organizacion|upper}}</span></p>
+                        </div>
+                    </div>
+                {% if lider.puesto_ocupado|length > 0 %} 
+                        <div class="row">
+                            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                                <span class="text-white"><strong>Puesto Ocupado</strong></span>
+                            </div>
+                            <div class="col rounded border border-white col-color">
+                                <span class="ml-2">{{lider.puesto_ocupado}}</span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if lider.periodo|length > 0 %}
+                        <div class="row">
+                            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                                <span class="text-white"><strong>Periodo</strong></span>
+                            </div>
+                            <div class="col rounded border border-white col-color">
+                                <span class="ml-2">{{lider.periodo}} </span>
+                            </div>
+                        </div>    
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- ANTECENTES LABORALEs-->
+        {% if lider.antecedentes_laborales|length > 0 or lider.puesto_ocupado_laboral|length > 0 or lider.periodo_laboral|length > 0 %} 
+            <div class="row">
+
+                <div class="col-2 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Antecedentes Laborales</strong></span></div>
+                </div>
+                <div class="col">
+                    {% if lider.antecedentes_laborales|length > 0 %} 
+                        <div class="row">
+                            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                                <span class="text-white"><strong>Empresa / Dependencia</strong></span>
+                            </div>
+                            <div class="col rounded border border-white col-color">
+                                <p class="text-justify m-2"><span>{{lider.antecedentes_laborales}} </span></p>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if lider.puesto_ocupado_laboral|length > 0 %} 
+                        <div class="row">
+                            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                                <span class="text-white"><strong>Puesto Ocupado Laboral</strong></span>
+                            </div>
+                            <div class="col rounded border border-white col-color">
+                                <p class="text-justify m-2"><span>{{lider.puesto_ocupado_laboral}}</span></p>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if lider.periodo_laboral|length > 0 %}
+                        <div class="row">
+                            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                                <span class="text-white"><strong>Periodo Laboral</strong></span>
+                            </div>
+                            <div class="col rounded border border-white col-color">
+                                <span class="ml-2">{{lider.periodo_laboral}} </span>
+                            </div>
+                        </div>    
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- FUENTE DE INGRESOS -->
+        {% if lider.fuente_ingresos|length > 0 %} 
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Fuente de Ingresos</strong></span></div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col-2 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><i class='fas fa-search-dollar'></i></span> 
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <p class="text-justify m-2" ><span> {{lider.fuente_ingresos}} </span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- SITUACIÓN PATRIMONIAL -->
+        {% if lider.inmuebles|length > 0 or lider.vehiculos|length > 0 or lider.cuentas_bancarias|length > 0 or lider.inversiones|length > 0 or lider.negocios|length > 0 or lider.deudas|length > 0 %}
+            <div class="row">
+                <div class="col-2 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Situación Patrimonial</strong></span></div>
+                </div>
+                <div class="col">
+                    {% if lider.inmuebles|length > 0 %} 
+                        <div class="row">
+                            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                                <span class="text-white"><strong>Inmuebles</strong></span>
+                            </div>
+                            <div class="col rounded border border-white col-color">
+                                <span class="m-2">{{lider.inmuebles}} </span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if lider.vehiculos|length > 0 %} 
+                        <div class="row">
+                            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                                <span class="text-white"><strong>Vehículos</strong></span>
+                            </div>
+                            <div class="col rounded border border-white col-color">
+                                <p class="text-justify m-2"><span >{{lider.vehiculos}}</span></p>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if lider.cuentas_bancarias|length > 0 %}
+                        <div class="row">
+                            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                                <span class="text-white"><strong>Cuentas Bancarias</strong></span>
+                            </div>
+                            <div class="col rounded border border-white col-color">
+                                <p class="text-justify m-2" ><span> {{lider.cuentas_bancarias}} </span></p>
+                            </div>
+                        </div>    
+                    {% endif %}
+
+                    {% if lider.inversiones|length > 0 %}
+                        <div class="row">
+                            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                                <span class="text-white"><strong>Inversiones</strong></span>
+                            </div>
+                            <div class="col rounded border border-white col-color">
+                                <p class="text-justify m-2" ><span> {{lider.inversiones}} </span></p>
+                            </div>
+                        </div>    
+                    {% endif %}
+
+                    {% if lider.negocios|length > 0 %}
+                        <div class="row">
+                            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                                <span class="text-white"><strong>Negocios</strong></span>
+                            </div>
+                            <div class="col rounded border border-white col-color">
+                                <p class="text-justify m-2" ><span> {{lider.negocios}} </span></p>
+                            </div>
+                        </div>    
+                    {% endif %}
+
+                    {% if lider.deudas|length > 0 %}
+                        <div class="row">
+                            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                                <span class="text-white"><strong>Deudas</strong></span>
+                            </div>
+                            <div class="col rounded border border-white col-color">
+                                <p class="text-justify m-2" ><span> {{lider.deudas}} </span></p>
+                            </div>
+                        </div>    
+                    {% endif %}
+                
+                </div>                            
+            </div>
+        {% endif %}
+
+        <!-- DEMANDAS -->
+        {% if lider.demandas %} 
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Demandas</strong></span></div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col-2 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><i class="fas fa-gavel"></i></span> 
+                        </div>
+                        <div class="col rounded bg-ligth border-bottom border">
+                            <p class="text-justify m-2" ><span> {{lider.demandas}} </span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- ANTECEDENTES PENALES -->
+        {% if lider.antecedentes_penales|length > 0 %} 
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Antecedentes Penales</strong></span></div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col-2 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><i class="fas fa-gavel"></i></span> 
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <p class="text-justify m-2" ><span> {{lider.antecedentes_penales}} </span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- 
+        ACTIVIDADES POLÍTICAS
+        {% if lider.actividades_politicas|length > 0 %} 
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Actividades Políticas</strong></span></div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col-2 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><i class="fas fa-vote-yea"></i></span> 
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <p class="text-justify m-2" ><span> {{lider.actividades_politicas}} </span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        -->
+
+        <!-- ACTIVIDADES DE ELECCIÓN POPULAR -->
+        {% if lider.puestos_eleccion_popular|length > 0 %} 
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Puestos de Elección Popular</strong></span></div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col-2 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><i class="fas fa-vote-yea"></i></span> 
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <p class="text-justify m-2" ><span> {{lider.puestos_eleccion_popular}} </span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- VÍNCULOS -->
+        {% if lider.vinculos_orgs|length > 0 or lider.vinculos_pol|length > 0 or lider.vinculos_ongs|length > 0 or lider.vinculos_autoridades|length > 0 or lider.vinculos_delictivos|length > 0 %}
+            <div class="row">
+                <div class="col-2 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Vínculos</strong></span></div>
+                </div>
+                <div class="col">
+                    {% if lider.vinculos_orgs|length > 0 %} 
+                        <div class="row">
+                            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                                <span class="text-white"><strong>Organizaciones</strong></span>
+                            </div>
+                            <div class="col rounded border border-white col-color">
+                                <p class="text-justify m-2"><span>{{lider.vinculos_orgs}} </span></p>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if lider.vinculos_pol|length > 0 %} 
+                        <div class="row">
+                            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                                <span class="text-white"><strong>Políticos</strong></span>
+                            </div>
+                            <div class="col rounded border border-white col-color">
+                                <p class="text-justify m-2"><span >{{lider.vinculos_pol}}</span></p>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if lider.vinculos_ongs|length > 0 %}
+                        <div class="row">
+                            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                                <span class="text-white"><strong>ONGS</strong></span>
+                            </div>
+                            <div class="col rounded border border-white col-color">
+                                <p class="text-justify m-2" ><span> {{lider.vinculos_ongs}} </span></p>
+                            </div>
+                        </div>    
+                    {% endif %}
+
+                    {% if lider.vinculos_autoridades|length > 0 %}
+                        <div class="row">
+                            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                                <span class="text-white"><strong>Autoridades</strong></span>
+                            </div>
+                            <div class="col rounded border border-white col-color">
+                                <p class="text-justify m-2" ><span> {{lider.vinculos_autoridades}} </span></p>
+                            </div>
+                        </div>    
+                    {% endif %}
+
+                    {% if lider.vinculos_delictivos|length > 0 %}
+                        <div class="row">
+                            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                                <span class="text-white"><strong>Delictivos</strong></span>
+                            </div>
+                            <div class="col rounded border border-white col-color">
+                                <p class="text-justify m-2" ><span> {{lider.vinculos_delictivos}} </span></p>
+                            </div>
+                        </div>    
+                    {% endif %}
+                </div>                            
+            </div>
+        {% endif %}
+
+        <!-- CONFLICTOS -->
+        {% if lider.conflictos_organizaciones|length > 0 or lider.conflictos_legales|length > 0 %}
+            <div class="row">
+                <div class="col-2 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Conflictos</strong></span></div>
+                </div>
+                <div class="col">
+                    {% if lider.conflictos_organizaciones|length > 0 %} 
+                        <div class="row">
+                            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                                <span class="text-white"><strong>Con Organizaciones</strong></span>
+                            </div>
+                            <div class="col rounded border border-white col-color">
+                                <span class="m-2">{{lider.conflictos_organizaciones}} </span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if lider.conflictos_legales|length > 0 %} 
+                        <div class="row">
+                            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                                <span class="text-white"><strong>Legales</strong></span>
+                            </div>
+                            <div class="col rounded border border-white col-color">
+                                <p class="text-justify m-2"><span >{{lider.conflictos_legales}}</span></p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>                            
+            </div>
+        {% endif %}
+
+        <!-- ACTIVIDADES POLÍTICAS -->
+        {% if lider.actividades_politicas|length > 0 %} 
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Actividades Políticas</strong></span></div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col-2 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><i class="fas fa-vote-yea"></i></span> 
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <p class="text-justify m-2" ><span> {{lider.actividades_politicas}} </span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- CAPACIDAD DE CONVOCATORIA -->
+        {% if lider.capacidad_convocatoria|length > 0 %} 
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Capacidad de Convocatoria</strong></span></div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col-2 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><i class='fas fa-bullhorn'></i></span> 
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <p class="text-justify m-2" ><span> {{lider.capacidad_convocatoria}} </span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}       
+
+        <!-- IMAGEN PÚBLICA -->
+        {% if lider.imagen_publica|length > 0 %} 
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Imagen Pública</strong></span></div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col-2 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><i class='fas fa-mobile-alt'></i></span> 
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <p class="text-justify m-2" ><span> {{lider.imagen_publica}} </span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}             
+
+        <!-- VULNERABILIDADES -->
+        {% if lider.vulnerabilidades|length > 0 %} 
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Vulnerabilidades</strong></span></div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col-2 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><i class='far fa-meh'></i></span> 
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <p class="text-justify m-2" ><span> {{lider.vulnerabilidades}} </span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}  
+
+        <!-- HABILIDADES -->
+        {% if lider.habilidades|length > 0 %} 
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Hábilidades</strong></span></div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col-2 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><i class='far fa-meh'></i></span> 
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <p class="text-justify m-2" ><span> {{lider.habilidades}} </span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}  
+
+        <!-- PERFIL -->
+        {% if lider.perfil|length > 0 %} 
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Perfil</strong></span></div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col-2 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><i class='fas fa-ruler-horizontal'></i></span> 
+                        </div>
+                        <div class="col rounded border border-white col-color">
+                            <p class="text-justify m-2" ><span> {{lider.perfil}} </span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}    
+
+        <!--EVENTOS-->
+        {% if lider.eventos.all|length > 0 %}
+        <div class="row">
+            <div class="col-2 bg-secondary border border-white rounded abs-center">
+                <div class="text-center"><span class="text-white"><strong>Acciones Relevantes</strong></span></div>
+            </div>
+            <div class="col">
+                {% for evento in lider.eventos.all %}
+                    {% if evento.fecha_evento|length > 0 %} 
+                        <div class="row">
+                            <div class="col-3 bg-secondary border border-white rounded abs-center">
+                                <span class="text-white"><strong>{{evento.fecha_evento}}</strong></span>
+                            </div>
+                            <div class="col rounded border border-white col-color">
+                                <h6 class="mt-2 text-dark text-center" ><strong> {{evento.nombre }} </strong></h6>
+                                <p class=" m-2 text-justify"> {{ evento.descripcion }} </p>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>                            
+        </div>
+        {% endif %}
+        
+        <!-- OBSERVACIONES -->
+        {% if lider.observaciones %} 
+            <div class="row">
+                <div class="col-3 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center"><span class="text-white"><strong>Observaciones</strong></span></div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col-2 bg-secondary border border-white rounded abs-center">
+                            <span class="text-white"><i class='fas fa-eye'></i></span> 
+                        </div>
+                        <div class="col rounded bg-ligth border-bottom border">
+                            <p class="text-justify m-2" ><span> {{lider.observaciones}} </span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}    
+
+        </div>
+
+        <!--Footer-->
+        <div class="card-footer bg-dark rounded pd-4">
+            <h6 class="text-white text-center"><i class='fas fa-bell'></i>&nbsp;&nbsp; Última Actualización por usuario con ID {{lider.user.id}}, el {{lider.modified}}</h6>
+        </div>
+   
+{% endblock %} 
+
+

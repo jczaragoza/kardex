@@ -1,0 +1,211 @@
+{% extends 'skin.html' %}
+{% load static %}
+
+{% block content%}
+<div class="card card-primary">
+    <div class="card-header">
+        <h2 class="card-title">
+            <i class="fas fa-user"></i>
+            KARDEX DE {{persona.nombre}} {{persona.apaterno}} {{persona.amaterno}}
+        </h2>
+        <a href="{% url 'reports:export_pdf' persona.pk %}" target="_blank" class="ml-1 btn bg-gradient-primary btn-round float-right">
+            <i class="fas fa-file-pdf"></i> Descargar PDF
+        </a>
+        <a href="{% url 'kardex:persona_update' persona.pk %}" class="ml-1 btn bg-gradient-success btn-round float-right">
+            <i class="fas fa-user-edit"></i> Editar
+        </a> 
+        <a href="{{request.META.HTTP_REFERER}}" class="btn bg-gradient-danger btn-round float-right">
+            <i class="fas fa-backward"></i> Atras
+        </a>
+    </div>
+    
+    <div class="card-body">
+
+        <div class="row align-items-center bg-gradient-dark rounded">
+            <div class="col-md-2">
+                <img src="{% static "img/Escudopolicia.png" %}" style="width: 80px; height: 80px;" />
+            </div>
+            <div class="col-md-8 text-center"><h5 class="ml-5 mt-1 text-white" >  </h5></div>
+            <div class="col-md-2 text-center"><h5 class="ml-6 mt-1 text-white" >ID {{ persona.id }}</h5></div>
+        </div>
+        <div class="row align-items-center bg-gradient-light rounded ">
+            <div class="col-md-1"></div>
+                <div class="col-md-3">
+                    {% if persona.foto %}
+                    <a href="">
+                        <img src=" {{ persona.foto.url }}" alt="{{persona.nombre}}" class=" rounded border border-secondary img-fluid " width="125px" height="150px" >
+                    </a>
+                    {% else %}
+                        <img src="{% static "img/user1.png" %}" class=" rounded border border-secondary img-fluid" width="125px" height="150px"/>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mt-4 text-left text-dark">
+                    <h5><strong>Nombre: {{ persona.apaterno }} {{ persona.amaterno }} {{ persona.nombre }} </strong> </h5>
+                    <hr>
+                    <h6><strong> Puesto: {{ persona.puesto}}</strong></h6>
+                    <h6><strong> Clave de Servidor Público: {{ persona.clavesp}}</strong></h6>
+                    <h6><strong> Alta: {{ persona.fecha_alta}}</strong></h6>
+                    <h6><strong> Edad: {{ persona.get_edad}} años</strong></h6>
+                <div class="col-md-2"></div>
+                <br>
+            </div>
+        </div>
+
+        <!--Generales Puesto-->
+        <div class="row align-items-center bg-gradient-dark rounded">
+            <div class="col-md-6 text-center"><h5 class="ml-5 mt-1 text-white" >Generales</h5></div>
+            <div class="col-md-6 text-center"><h5 class="ml-5 mt-1 text-white" >Puesto</h5></div>
+        </div>
+        <div class="row align-items-center bg-gradient-light rounded">
+            <div class="col-md-1"></div>
+            <div class="col-md-5 mt-2 text-left text-dark">
+                <li><strong>RFC: </strong> {{persona.rfc}}</li>
+                <li><strong>Fecha de Alta: </strong> {{ persona.fecha_alta }}</li>
+                <li><strong>Estatus: </strong> {{ persona.estatus }}</li>
+                <li><strong>CUIP: </strong>{{ persona.cuip }}</li>
+                <li><strong>CURP: </strong>{{ persona.curp }}</li>
+                <li><strong>Clave de Servidor Público: </strong>{{ persona.clavesp }}</li>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-5 mt-2 text-left text-dark">
+                <li><strong>Número de Plaza: </strong>{{ persona.num_plaza }}</li>
+                <li><strong>Puesto: </strong>{{ persona.puesto }}</li>
+                <li><strong>Código de Puesto: </strong>{{ persona.puesto.codigo_puesto }}</li>
+                <li><strong>Nivel Y Rango: </strong>{{ persona.puesto.nivel_rango }}</li>
+                <li><strong>Sueldo Bruto: </strong> $ {{ persona.puesto.sueldo_bruto }}</li>
+                <li><strong>Sueldo Neto: </strong>$ {{ persona.puesto.sueldo_neto }}</li>
+                <br>
+            </div>       
+        </div>
+
+        <!--Domicilio Contacto-->
+        <div class="row row align-items-center bg-gradient-dark rounded">
+            <div class="col-md-6 text-center"><h5 class="ml-5 mt-1 text-white" >Domicilio</h5></div>
+            <div class="col-md-6 text-center"><h5 class="ml-5 mt-1 text-white" >Contacto</h5></div>
+        </div>
+        <div class="row align-items-center bg-gradient-light rounded">
+            <div class="col-md-1"></div>
+            <div class="col-md-5 mt-2 text-left text-dark">
+                <li><strong>Calle </strong> {{persona.calle}}</li>
+                <li><strong>Número: </strong> {{ persona.interior }}</li>
+                <li><strong>Exterior: </strong> {{ persona.exterior }}</li>                
+                <li><strong>Colonia: </strong>{{ persona.colonia }}</li>
+                <li><strong>Municipio: </strong>{{ persona.municipio }}</li>
+                <li><strong>Código Postal: </strong>{{ persona.cp }}</li>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-5 mt-2 text-left text-dark">
+                <li><strong>Correo Electrónico: </strong> {{persona.correo}}</li>
+                <li><strong>Número Fijo: </strong> {{ persona.telefono_fijo }}</li>
+                <li><strong>Número Móvil: </strong> {{ persona.telefono_movil }}</li>                
+                <li><strong>Contacto Familiar: </strong>{{ persona.contacto_familiar }}</li>
+                <li><strong>ISSEMYM: </strong>{{ persona.nss }}</li>
+                <li><strong>Tipo de Sangre: </strong>{{ persona.tipo_sangre }}</li>
+                <li><strong>Escolaridad: </strong>{{ persona.escolaridad }}</li>
+                <br>
+            </div>
+        </div>
+        
+        <!--Domicilio Observaciones-->
+        <div class="row align-items-center bg-gradient-dark rounded">
+            <div class="col-md-6 text-center"><h5 class="ml-5 mt-1 text-white" >Adscripción Física</h5></div>
+            <div class="col-md-6 text-center"><h5 class="ml-5 mt-1 text-white" >Observaciones</h5></div>
+        </div>
+        <div class="row align-items-center bg-gradient-light rounded">
+            <div class="col-md-1"></div>
+            <div class="col-md-5 mt-2 text-left text-dark">
+                <li><strong>Unidad Administrativa: </strong>{{ persona.unidad_administrativa|default_if_none:'' }}</li>
+                <li><strong>Adscripción: </strong>{{ persona.adscripcion|default_if_none:'' }}</li>
+                <li><strong>Dirección: </strong> {{ persona.direccion|default_if_none:'' }}</li>
+                <li><strong>Subdirección: </strong> {{ persona.subdireccion|default_if_none:'' }}</li>
+                <li><strong>Departamento: </strong> {{persona.departamento|default_if_none:''}}</li>
+                <br>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-5 mt-2 text-left text-dark">
+                <li><strong>Observaciones: </strong>{{ persona.Observaciones}}</li>
+                <li><strong>Fecha y Motivo de Baja: </strong> {{ persona.motivo_baja|default_if_none:''  }}</li>
+                <br>
+            </div>            
+        </div>
+        
+        <!--Cursos-->
+        <div class=" row align-items-center bg-gradient-dark rounded">
+            <div class="col-md-6 text-center"><h5 class="ml-5 mt-1 text-white" >Cursos</h5></div>
+            <div class="col-md-6 text-center"><h5 class="ml-5 mt-1 text-white" >Vehículo Asignado</h5></div>
+        </div>
+
+        
+        <div class="row align-items-center bg-gradient-light rounded">
+            <div class="col-md-1"></div>
+            <div class="col-md-5 mt-2 text-left text-dark">
+                {% for curso in cursos %}
+                    <li> <strong> {{curso.tipo_curso}}: </strong> {{ curso.nombre}} </li>
+                    <li> <strong> Duración: </strong> {{ curso.horas}}  HORAS</li>
+                    <li> <strong> Documento Obtenido: </strong> {{ curso.documento}} </li>
+                    <hr>
+                {% endfor %}
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-5 mt-2 text-left text-dark">
+                <div class="col-md-5 mt-2 text-left text-dark">
+                    {% for vehiculo in vehiculos %}
+                        
+                        <li> <strong> Vehículo: </strong> {{ vehiculo.marca}} / {{ vehiculo.submarca}} </li>    
+                        <li> <strong> Modelo: </strong> {{ vehiculo.modelo}} </li>
+                        <li> <strong> Matrícula: </strong> {{ vehiculo.matricula}} </li>
+
+                        <hr>
+                    {% endfor %}
+                </div>
+            </div>
+            
+        </div>
+
+        <!--ARMAS-->
+        <div class=" row align-items-center bg-gradient-dark rounded">
+            <div class="col-md-6 text-center"><h5 class="ml-5 mt-1 text-white" >Armas</h5></div>
+            <div class="col-md-6 text-center"><h5 class="ml-5 mt-1 text-white" ></h5></div>
+        </div>
+
+        
+        <div class="row align-items-center bg-gradient-light rounded">
+            <div class="col-md-1"></div>
+            <div class="col-md-5 mt-2 text-left text-dark">
+                {% for arma in armas %}
+                    <li> <strong> {{arma.clase}}: </strong> {{ arma.marca}} </li>
+                    <li> <strong> Modelo: </strong> {{ arma.modelo}}  </li>
+                    <li> <strong> Matrícula: </strong> {{ arma.matricula}}  </li>
+                    <li> <strong> Calibre: </strong> {{ arma.calibre}} </li>
+                    <hr>
+                {% endfor %}
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-5 mt-2 text-left text-dark">
+                <div class="col-md-5 mt-2 text-left text-dark">
+                    {% comment %} {% for vehiculo in vehiculos %}
+                        
+                        <li> <strong> </strong> {{ }} / {{ }} </li>    
+                        <li> <strong> </strong> {{ }} </li>
+                        <li> <strong> </strong> {{ }} </li>
+
+                        <hr>
+                    {% endfor %} {% endcomment %}
+                </div>
+            </div>
+            
+        </div>
+
+
+
+    </div>
+
+    <div class="card-footer">
+       
+    </div>
+</div>
+
+        
+{% endblock %} 
+
+

@@ -1,0 +1,25 @@
+{% extends 'list.html' %}
+{% load static %}
+{% block head_list %}
+    <script src="{% static 'vehiculo/js/list.js' %}"></script>
+{% endblock %}
+
+{% block columns %}
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Marca</th>
+        <th scope="col">Submarca</th>
+        <th scope="col">Tipo</th>
+        <th scope="col">Modelo</th>
+        <th scope="col">Color</th>
+        <th scope="col">Matrícula</th>
+        <th scope="col">Motor</th>
+        <th scope="col">No. de serie</th>
+        <th scope="col">Resguardo</th>
+        <th scope="col">Opciones</th>
+    </tr>
+{% endblock %}
+
+{% block javascript_list %}
+
+{% endblock %}

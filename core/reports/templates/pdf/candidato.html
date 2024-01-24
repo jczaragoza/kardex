@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title> FICHA {{ candidato.nombre }} {{candidato.apaterno}} {{candidato.amaterno}}</title>
+        <link rel="stylesheet" href="/static/lib/bootstrap-4.6.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/lib/fontawesome-5.15.3/css/all.min.css">
+        <link rel="stylesheet" href="/static/lib/jquery-ui-1.12.1/jquery-ui.css">
+
+        <!-- Google Font -->
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+
+        <!-- FontAwesome JS-->
+        <script defer src="/static/assets/fontawesome/js/all.min.js"></script>
+        
+        <style>
+            .abs-center {
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+            }
+            .abs-right {
+                display: flex; 
+                align-items: right; 
+                justify-content: right;
+            }
+            .col-color{
+                background-color:
+                rgb(223, 223, 223);
+            }
+            .w-95{
+                width: 95%;
+            }
+            .w-16{
+                width: 16%;
+            }
+            .font-smaller{
+                font-size: smaller;                
+            }
+        </style>
+    </head>
+    <body class=" font-smaller">
+        
+        <div class="row rounded " style="background-color: rgb(0, 73, 102);">
+            <div class="col"></div>
+            <div class="row">
+                <div class="col"></div>
+                    {% if candidato.estatus_candidato == 'Presidente Municipal' or candidato.estatus_candidato == 'Presidenta Municipal' %}
+                        <div class="col-auto text-center"><h4 class="mt-2 text-white" > {{candidato.municipio}}</h4></div>
+                    {% elif candidato.estatus_candidato == 'Diputado Local' or candidato.estatus_candidato == 'Diputada Local'%}
+                        <div class="col-auto text-center"><h4 class="mt-2 text-white" >DISTRITO {{candidato.distrito_local.nombre}}</h4></div>
+                    {% elif candidato.estatus_candidato == 'Diputado Federal' or candidato.estatus_candidato == 'Diputada Federal'  %}
+                        <div class="col-auto text-center"><h4 class="mt-2 text-white" > {{candidato.distrito_federal.nombre}}</h4></div>
+                    {% elif candidato.estatus_candidato == 'Candidato a Presidencia Municipal' or candidato.estatus_candidato == 'Candidata a Presidencia Municipal'  %}
+                        <div class="col-auto text-center"><h4 class="mt-2 text-white" > {{candidato.municipio}}</h4></div>
+                    {% elif candidato.estatus_candidato == 'Militante'%}
+                        <div class="col-8 text-center"><h3 class="mt-1 text-white" > {{candidato.estatus_candidato}}</h3></div>
+                    {% endif %}
+                <div class="col"></div>
+            </div>
+            <div class="col text-right text-white mt-2">ID {{candidato.id}}</div>
+        </div>
+
+        <p>
+
+        <!--ENCABEZADO-->   
+        <div class="row rounded bg-secondary align-items-center">
+            <!--FOTO-->
+            {% if candidato.foto %}
+                <div class="col-2 m-2">
+                    <img src=" {{ candidato.foto.url }}" alt="{{candidato.nombre}}" class=" img-thumbnail rounded border-2 border-dark mr-5" style="height: 165px;">
+                </div>  
+            {% else %}
+                <div class="col-2 m-2">
+                    <img src=" {% static "/img/user1.png" %}" alt="{{candidato.nombre}}" class=" img-thumbnail rounded border-2 border-dark mr-5" style="height: 165px;">
+                </div>
+            {% endif %}
+
+            <!--DATOS PRINCIPALES-->
+            <div class="col">
+                <div class="row m-2">
+                    <div class="col p-6 justify-content-center text-white justify-content-md-between m-2">
+                        <h5 class="name mt-0 mb-1 text-uppercase text-uppercase"><strong>{{candidato.nombre}} {{candidato.apaterno}} {{candidato.amaterno}}</strong></h5>
+                        <div><h6>{{candidato.estatus_candidato}} ({{candidato.periodo}}) </h6></div>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-birthday-cake me-2" data-fa-transform="grow-3"></i>&nbsp;&nbsp; {{candidato.fecha_nacimiento}}</li> 
+                                <li class="mb-2"><i class="far fa-calendar-alt me-2" data-fa-transform="grow-3"></i>&nbsp;&nbsp; {{candidato.get_edad}} años</li>
+                                {%  if candidato.correo|length > 0 %}
+                                    <li class="mb-2"><i class="far fa-envelope fa-fw me-2" data-fa-transform="grow-3"></i>&nbsp;&nbsp;{{candidato.correo}}</li>
+                                {% endif %}
+                                {% if candidato.facebook|length > 0 %}
+                                    <li class="mb-2"><i class="fab fa-facebook-square me-2" data-fa-transform="grow-6"></i>&nbsp;&nbsp; {{candidato.facebook}}</li>
+                                {% endif %}
+                                {% if candidato.twitter|length > 0 %}
+                                    <li class="mb-2"><i class="fab fa-twitter me-2" data-fa-transform="grow-6"></i>&nbsp;&nbsp; {{candidato.twitter}}</li>
+                                {% endif %}
+                            </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!--INFO PARTIDO-->
+            {% if candidato.partido %}
+                <div class="col-3 m-2 text-white">
+                    <ul class="resume-social list-unstyled">
+                        <li class="mb-3 mr-5"><span class="fa-container text-center me-2"><i class="fas fa-user-tie	"></i></span>&nbsp;&nbsp;{{candidato.partido}}</li>
+                    </ul>
+                    <img src=" {{ candidato.partido.foto.url }}" alt="{{candidato.partido}}" class=" img-thumbnail rounded border img-fluid" style="height: 100px;">
+                </div>  
+            {% endif %}
+        </div>
+
+        <!--ÚLTIMA ACTUALIZACIÓN-->
+        <div class="row rounded bg-white text-dark">
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col-7"><h6 class="text-dark m-2 text-right"><i class='fas fa-bell'></i>Última Actualización: {{candidato.modified}} </h6></div>
+        </div>
+        
+        <!-- DATOS GENERALES-->
+        <div class="row">
+            <div class="col">
+                <h6 class="resume-skills-cat font-weight-bold">Riesgo</h6>
+                <div class="resume-skill-name">{{candidato.riesgo}}</div>
+                {%if candidato.riesgo == 'Bajo'%}
+                    <div class="progress resume-progress">
+                        <div class="progress-bar theme-progress-bar bg-success" role="progressbar" style="width: 33.3%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                {% elif candidato.riesgo == 'Medio' %}
+                    <div class="progress resume-progress">
+                        <div class="progress-bar theme-progress-bar bg-warning" role="progressbar" style="width: 66.6%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                {% elif candidato.riesgo == 'Alto' %}
+                    <div class="progress resume-progress">
+                        <div class="progress-bar theme-progress-bar bg-danger" role="progressbar" style="width: 99.9%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                {% endif %}
+            </div>                                                    
+            <div class="col">
+                <h6 class="resume-skills-cat font-weight-bold">Poder de Convocatoria</h6>
+                <div class="resume-skill-name">{{candidato.poder_convocatoria}}</div>
+                    {%if candidato.poder_convocatoria == 'Bajo'%}
+                        <div class="progress resume-progress">
+                            <div class="progress-bar theme-progress-bar bg-success" role="progressbar" style="width: 33.3%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    {% elif candidato.poder_convocatoria == 'Medio' %}
+                        <div class="progress resume-progress">
+                            <div class="progress-bar theme-progress-bar bg-warning" role="progressbar" style="width: 66.6%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    {% elif candidato.poder_convocatoria == 'Alto' %}
+                        <div class="progress resume-progress">
+                            <div class="progress-bar theme-progress-bar bg-danger" role="progressbar" style="width: 99.9%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    {% endif %}
+            </div>
+        </div> 
+        <hr>
+        {% if candidato.estatus_candidato == 'Diputado Local' or candidato.estatus_candidato == 'Diputada Local'%}
+            {% if candidato.disttrito_local.nombre == 'REPRESENTACIÓN PROPORCIONAL' or candidato.distrito_local.nombre == 'PLURINOMINAL'  %}
+            {% else %}
+                <div class="row">
+                    <div class="col-3 ml-2 bg-light border-bottom border-right rounded abs-center">
+                        <span class="text-dark"><strong>Municipios:</strong></span>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col rounded border-bottom border-right">
+                                <p class="text-justify m-2 text-muted">
+                                    <span class="text-muted">
+                                        {% for distritos in distritos_locales %}
+                                            {% if distritos.distrito_local_id == candidato.distrito_local.id %}
+                                            <i class='fas fa-angle-right'></i> {{ distritos.cabecera }} &nbsp;&nbsp; 
+                                            {% endif %}
+                                        {% endfor %} 
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            {% endif %}
+        {% elif candidato.estatus_candidato == 'Diputado Federal' or candidato.estatus_candidato == 'Diputada Federal'%}
+            <div class="row">
+                <div class="col-3 ml-2 bg-light border-bottom border-right rounded abs-center">
+                    <span class="text-dark"><strong>Municipios:</strong></span>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col rounded border-bottom border-right">
+                            <p class="text-justify m-2 text-muted">
+                                <span class="text-muted">
+                                    {% for distritos in distritos_federales %}
+                                                {% if distritos.distrito_federal_id == candidato.distrito_federal.id %}
+                                                    {% for mun in municipios  %}
+                                                        {% if distritos.municipio_id == mun.id %}
+                                                        <i class='fas fa-angle-right'></i> {{ mun.nombre }} &nbsp;&nbsp; 
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                            {% endfor %} 
+                                                    
+                                    
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        {% endif %}
+        <div class="row">
+            <div class="col-3 ml-2 bg-light border-bottom border-right rounded abs-center">
+                <span class="text-dark"><strong>RFC:</strong></span>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col rounded border-bottom border-right">
+                        <p class="text-justify m-2 text-muted"><span>{{ candidato.rfc }}</span></p>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <div class="row">
+            <div class="col-3 ml-2 bg-light border-bottom border-right rounded abs-center">
+                <span class="text-dark"><strong>CURP:</strong></span>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col rounded border-bottom border-right">
+                        <p class="text-justify m-2 text-muted"><span>{{ candidato.curp }}</span></p>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        {% if candidato.estado_civil %}
+            <div class="row">
+                <div class="col-3 ml-2 bg-light border-bottom border-right rounded abs-center">
+                    <span class="text-dark"><strong>Dirección:</strong></span>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col rounded border-bottom border-right">
+                            <p class="text-justify m-2 text-muted"><span>{{ candidato.direccion }}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        {% endif %}
+        {% if candidato.vehiculo %}
+            <div class="row">
+                <div class="col-3 ml-2 bg-light border-bottom border-right rounded abs-center">
+                    <span class="text-dark"><strong>Vehículo:</strong></span>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col rounded border-bottom border-right">
+                            <p class="text-justify m-2 text-muted"><span>{{ candidato.vehiculo}}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        {% endif %}
+        {% if candidato.telefono_fijo %}
+            <div class="row">
+                <div class="col-3 ml-2 bg-light border-bottom border-right rounded abs-center">
+                    <span class="text-dark"><strong>Teléfono Fijo:</strong></span>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col rounded border-bottom border-right">
+                            <p class="text-justify m-2 text-muted"><span>{{ candidato.telefono_fijo}}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        {% endif %}
+        {% if candidato.telefono_movil %}
+            <div class="row">
+                <div class="col-3 ml-2 bg-light border-bottom border-right rounded abs-center">
+                    <span class="text-dark"><strong>Teléfono Móvil:</strong></span>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col rounded border-bottom border-right">
+                            <p class="text-justify m-2 text-muted"><span>{{ candidato.telefono_movil}}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        {% endif %}
+        {% if candidato.escolaridad %}
+            <div class="row">
+                <div class="col-3 ml-2 bg-light border-bottom border-right rounded abs-center">
+                    <span class="text-dark"><strong>Formación Académica:</strong></span>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col rounded border-bottom border-right">
+                            <p class="text-justify m-2 text-muted"><span>{{ candidato.escolaridad}}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        {% endif %}    
+        {% if candidato.cargos_ocupados %}
+            <div class="row">
+                <div class="col-3 ml-2 bg-light border-bottom border-right rounded abs-center">
+                    <span class="text-dark"><strong>Cargos Ocupados:</strong></span>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col rounded border-bottom border-right">
+                            <p class="text-justify m-2 text-muted"><span>{{ candidato.cargos_ocupados}}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        {% endif %}    
+        {% if candidato.vinculos_politicos %}
+            <div class="row">
+                <div class="col-3 ml-2 bg-light border-bottom border-right rounded abs-center">
+                    <span class="text-dark"><strong>Vínculos Políticos:</strong></span>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col rounded border-bottom border-right">
+                            <p class="text-justify m-2 text-muted"><span>{{ candidato.vinculos_politicos}}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        {% endif %}    
+        {% if candidato.zona_influencia %}
+            <div class="row">
+                <div class="col-3 ml-2 bg-light border-bottom border-right rounded abs-center">
+                    <span class="text-dark"><strong>Zona de Influencia:</strong></span>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col rounded border-bottom border-right">
+                            <p class="text-justify m-2 text-muted"><span>{{ candidato.zona_influencia}}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        {% endif %}    
+        {% if candidato.experiencia_laboral %}
+            <div class="row">
+                <div class="col-3 ml-2 bg-light border-bottom border-right rounded abs-center">
+                    <span class="text-dark"><strong>Experiencia Laboral:</strong></span>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col rounded border-bottom border-right">
+                            <p class="text-justify m-2 text-muted"><span>{{ candidato.experiencia_laboral}}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        {% endif %}    
+        {% if candidato.comisiones %}
+            <div class="row">
+                <div class="col-3 ml-2 bg-light border-bottom border-right rounded abs-center">
+                    <span class="text-dark"><strong>Comisiones:</strong></span>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col rounded border-bottom border-right">
+                            <p class="text-justify m-2 text-muted"><span>{{ candidato.comisiones}}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        {% endif %}    
+        {% if candidato.temas_atencion %}
+            <div class="row">
+                <div class="col-3 ml-2 bg-light border-bottom border-right rounded abs-center">
+                    <span class="text-dark"><strong>Temas de Atención:</strong></span>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col rounded border-bottom border-right">
+                            <p class="text-justify m-2 text-muted"><span>{{ candidato.temas_atencion}}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        {% endif %}  
+        {% if candidato.amenazas %}
+            <div class="row">
+                <div class="col-3 ml-2 bg-light border-bottom border-right rounded abs-center">
+                    <span class="text-dark"><strong>Amenazas:</strong></span>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col rounded border-bottom border-right">
+                            <p class="text-justify m-2 text-muted"><span>{{ candidato.amenazas}}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        {% endif %}  
+        {% if candidato.vinculos_delincuencia %}
+            <div class="row">
+                <div class="col-3 ml-2 bg-light border-bottom border-right rounded abs-center">
+                    <span class="text-dark"><strong>Vínculos con la Delincuencia:</strong></span>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col rounded border-bottom border-right">
+                            <p class="text-justify m-2 text-muted"><span>{{ candidato.vinculos_delincuencia}}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        {% endif %}  
+        {% if candidato.protesta %}
+        <div class="row">
+            <div class="col-3 ml-2 bg-light border-bottom border-right rounded abs-center">
+                <span class="text-dark"><strong>¿Tomó protesta?</strong></span>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col rounded border-bottom border-right">
+                        <p class="text-justify m-2 text-muted"><span>{{ candidato.protesta}}</span></p>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    {% endif %}  
+
+
+
+        <!-- <div class="card-body border">
+            <div class="row border-dark">
+                <div class="col-7 border">
+                <li><strong>RFC:</strong> {{candidato.rfc}}</li>
+                <li><strong>CURP:</strong> {{candidato.curp}}</li>
+                {% if candidato.estado_civil|length > 0 %}
+                    <li><strong>Estado Cívil:</strong> {{candidato.estado_civil}}</li>
+                {% endif %}
+                {% if candidato.direccion|length > 0 %}
+                    <li><strong>Domicilio:</strong> {{candidato.direccion}}</li>
+                {% endif %}
+                {% if candidato.vehiculo|length > 0 %}
+                    <li><strong>Vehículos:</strong><p class="text-justify">{{candidato.vehiculo}}</p></li>
+                {% endif %}
+                {% if candidato.telefono_fijo|length > 0 %}
+                    <li><strong>Teléfono Fijo:</strong> {{candidato.telefono_fijo}}</li>
+                {% endif %}
+                {% if candidato.telefono_movil|length > 0 %}
+                    <li><strong>Teléfono Móvil:</strong> {{candidato.telefono_movil}}</li>
+                {% endif %}
+                {% if candidato.escolaridad|length > 0 %}
+                    <li><strong>Formación Académica:</strong> {{candidato.escolaridad}}</li>
+                {% endif %}
+                {% if candidato.cargos_ocupados|length > 0 %}
+                    <li><strong>Cargos Ocupados:</strong><p class="text-justify">{{candidato.cargos_ocupados}}</p></li>
+                {% endif %}
+                {% if candidato.vinculos_politicos|length > 0 %}
+                    <li><strong>Vínculos Políticos:</strong><p class="text-justify">{{candidato.vinculos_politicos}}</p></li>
+                {% endif %}
+                {% if candidato.zona_influencia|length > 0 %}
+                    <li><strong>Zona de Inlfuencia:</strong> &nbsp; {{candidato.zona_influencia}}</li>
+                {% endif %}
+                {% if candidato.experiencia_laboral|length > 0 %}
+                    <li><strong>Experiencia Laboral:</strong><p class="text-justify">{{candidato.experiencia_laboral}}</p></li>
+                {% endif %}
+                {% if candidato.comisiones|length > 0 %}
+                    <li><strong>Comisiones:</strong><p class="text-justify">{{candidato.comisiones}}</p></li>
+                {% endif %}
+                {% if candidato.temas_atencion|length > 0 %}
+                    <li><strong>Temas de Atención:</strong><p class="text-justify">{{candidato.temas_atencion}}</p></li>
+                {% endif %}
+                {% if candidato.amenazas|length > 0 %}
+                    <li><strong>Amenazas:</strong><p class="text-justify">{{candidato.amenazas}}</p></li>
+                {% endif %}
+                {% if candidato.vinculos_delincuencia|length > 0 %}
+                    <li><strong>Vínculos con la delincuencia:</strong><p class="text-justify">{{candidato.vinculos_delincuencia}}</p></li>
+                {% endif %}                            
+                </div>
+                <div class="col border">
+                </div>
+            </div>
+        </div> -->
+
+       
+                   
+
+    </body>
+</html>

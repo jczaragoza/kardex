@@ -1,0 +1,18 @@
+{% extends 'list.html' %}
+{% load static %}
+{% block head_list %}
+    <script src="{% static 'evento/js/list.js' %}"></script>
+{% endblock %}
+
+{% block columns %}
+    <th>id</th>
+    <th>Título</th>
+    <th>Fecha de Evento</th>
+    <th>Modificación</th>
+    <th class="text-center">Opciones</th>
+{% endblock %}
+
+{% block javascript_list %}
+
+{% endblock %}
+

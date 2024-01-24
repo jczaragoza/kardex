@@ -1,0 +1,158 @@
+{% extends 'list.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block head_list %}
+    <link href="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.css' %}" rel="stylesheet"/>
+    <script src="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
+
+    <link href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}" rel="stylesheet"/>
+    <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
+    <script src="{% static 'lib/select2-4.0.13/js/i18n/es.js' %}"></script>
+
+    <script src="{% static 'lib/moment-2.25.3/moment-with-locales.js' %}"></script>
+    <script src="{% static 'lib/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.js' %}"></script>
+    <link href="{% static 'lib/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet"/>
+
+    <link href="{% static 'lib/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.css' %}" rel="stylesheet"/>
+    <script src="{% static 'lib/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.js' %}"></script>
+
+    <script src="{% static 'kardex/js/form.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <form enctype="multipart/form-data"  method="post">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">
+                    {% if action == 'add' %}
+                        <i class="fas fa-plus"></i>
+                    {% else %}
+                        <i class="fas fa-edit"></i>
+                    {% endif %}
+                    {{ title }}
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card card-secondary">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fas fa-boxes"></i> Detalle de Personal</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Buscador de Personal:</label>
+                                    <div class="input-group"><!--
+                                        <input type="text" class="form-control" name="search"
+                                               placeholder="Ingrese una descripción de producto" autocomplete="off">
+                                        <span class="input-group-append">
+                                            <button type="button" class="btn btn-danger btn-flat btnClearSearch"><i
+                                                    class="fas fa-times"></i></button>
+                                          </span> -->
+                                          <div class="input-group">
+                                            <select class="form-control select2" style="width: 100%;" name="search">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <button type="button" class="btn btn-danger btn-xs btn-flat btnRemoveAll">
+                                    <i class="fas fa-trash"></i> Eliminar todos mis items
+                                </button>
+                                <hr>
+                                <table class="table table-bordered" id="tblPersonas">
+                                    <thead>
+                                    <tr>
+                                        
+                                        <th>Nombre</th>
+                                        <th>Clave de SP</th>
+                                        <th>Estatus</th>
+                                        <th>RFC</th>
+                                        <th>CUIP</th>
+                                        <th>Eliminar</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card card-secondary">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fas fa-shopping-cart"></i> Datos del kardex</h3>
+                            </div>
+                            <div class="card-body">
+                                <input type="hidden" name="action" value="{{ action }}">
+                                <div class="form-group">
+                                    <label>Fecha de Creación:</label>
+                                    {{ form.fecha_actual }}
+                                </div>
+                                <div class="form-group">
+                                    <label>Curso:</label>
+                                    <div class="input-group">
+                                        {{ form.curso }}
+                                        <div class="input-group-append">
+                                            <button class="btn btn-success btn-flat btnAddCurso" type="button">
+                                                <i class="fas fa-user-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary btn-flat">
+                    <i class="fas fa-save"></i> Guardar registro
+                </button>
+                <a href="{% url 'kardex:kardex_list' %}" class="btn btn-danger btn-flat">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </div>
+        </div>
+    </form>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModalCurso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <form id="frmCurso" enctype="multipart/form-data" method="post">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                            <b><i class="fas fa-chalkboard-teacher	"></i> Nuevo registro de un curso</b>
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {% for field in frmCurso.visible_fields %}
+                            <div class="form-group">
+                                <label for="">{{ field.label }}:</label>
+                                {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary btn-block btn-flat">
+                            <i class="fas fa-save"></i> Guardar Curso
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        //vents.items.products = {{ det|safe }};
+        // Se removio el vents.list(); para calcular bien el iva en el editar. Revisar al final del archivo form.js se lo puso.
+    </script>
+{% endblock %}
+

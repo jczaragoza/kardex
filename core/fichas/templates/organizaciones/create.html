@@ -1,0 +1,167 @@
+{% extends 'list.html' %}
+{% load widget_tweaks %}
+{% load security_extras %}
+{% load static %}
+{% block head_list %}
+
+    <!--Formvalidation Libs-->
+    <link rel="stylesheet" href="{% static 'lib/formvalidation-1.9.0/css/formValidation.min.css' %}">
+    <script src="{% static 'lib/formvalidation-1.9.0/js/es6-shim.min.js' %}"></script>
+    <script src="{% static 'lib/formvalidation-1.9.0/js/FormValidation.min.js' %}"></script>
+    <script src="{% static 'lib/formvalidation-1.9.0/js/plugins/Bootstrap.min.js' %}"></script>
+    <script src="{% static 'lib/formvalidation-1.9.0/js/locales/es_ES.min.js' %}"></script>
+    
+    <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
+    <script src="{% static 'lib/select2-4.0.13/js/i18n/es.js' %}"></script>
+
+    <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}">
+
+    <script src="{% static 'organizaciones/js/form.js' %}"></script>
+
+    <style>
+        .btn-flotante {
+            font-size: 16px; /* Cambiar el tamaño de la tipografia */
+            text-transform: uppercase; /* Texto en mayusculas */
+            font-weight: bold; /* Fuente en negrita o bold */
+            color: #ffffff; /* Color del texto */
+            border-radius: 5px; /* Borde del boton */
+            letter-spacing: 2px; /* Espacio entre letras */
+            background-color: #E91E63; /* Color de fondo */
+            padding: 5px 33px; /* Relleno del boton */
+            position: fixed;
+            bottom: 226px;
+            right: 40px;
+            transition: all 300ms ease 0ms;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+            z-index: 90;
+        }
+    </style>
+
+{% endblock %}
+
+{% block content %}
+    <form class="form" method="post" action="." enctype="multipart/form-data" id="frmForm" data-url="{{ list_url }}">
+        <input type="hidden" name="user" value="{{ user.pk}}" />
+        <div class="card {{ dshboard.card }}">
+            <div class="card-header">
+                <h3 class="card-title">
+                    {% if action == 'add' %}
+                        <i class="fas fa-plus"></i>
+                    {% else %}
+                        <i class="fas fa-edit"></i>
+                    {% endif %}
+                    {{ title }}
+                </h3>
+            </div>
+            <div class="card-body" style="display: block;">
+                <div class="container-fluid">
+                    <input type="hidden" name="action" id="action" value="{{ action }}">
+                    {% csrf_token %}
+                    {# Forms Visible #}
+                    {% for field in form.visible_fields %}
+                        <div class="form-group">
+                            <label>{{ field.label }}:</label>
+                            {% if field|is_checkbox %}
+                                 <br>{{ field }}
+                            {% else %}
+                                {{ field|add_class:'form-control'|attr:"autocomplete:off" }}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <!-- BOTONES Modal-->
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <input type="hidden" name="action" value="{{ action }}">
+                        <label class="btn btn-secondary active">
+                            <input type="radio" class="btnAddEvento" autocomplete="off" checked> Agregar Evento <i class="fas fa-flag"></i>
+                        </label> 
+                        <span>&nbsp;</span>
+                        <label class="btn btn-secondary">
+                            <input type="radio" class="btnAddIntegrante" autocomplete="off" checked> Agregar Integrante <i class="fas fa-user"></i>
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+            {% block box_footer %}
+                <div class="card-footer">
+                    {% block buttons %}
+                        <button type="submit" class="btn btn-primary btn-flat">
+                            <i class="fas fa-save"></i> Guardar registro
+                        </button>
+                        <a href="{{ list_url }}" class="btn btn-danger btn-flat">
+                            <i class="fas fa-times"></i> Cancelar
+                        </a>
+                    {% endblock %}
+                </div>
+            {% endblock %}
+        </div>
+    </form>
+
+    <!-- Modal  Evento-->
+    <div class="modal fade" id="myModalEvento" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <form id="frmEvento" enctype="multipart/form-data" method="post">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <b>{{titleEvento}}</b>
+                        <i class="fas fa-flag"></i>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        {% for field in frmEvento.visible_fields %}
+                            <div class="form-group">
+                                <label>{{ field.label }}:</label>
+                                {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i> Guardar Evento
+                        </button>
+                        {% comment %} <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> {% endcomment %}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal  Integrante-->
+    <div class="modal fade" id="myModalIntegrante" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <form id="frmIntegrante" enctype="multipart/form-data" method="post">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <b>Agregar Nombre de Integrante</b>
+                        <i class="fas fa-flag"></i>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        {% for field in frmIntegrante.visible_fields %}
+                            <div class="form-group">
+                                <label>{{ field.label }}:</label>
+                                {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i> Guardar Integrante
+                        </button>
+                        {% comment %} <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> {% endcomment %}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+    

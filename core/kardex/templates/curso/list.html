@@ -1,0 +1,27 @@
+{% extends 'list.html' %}
+{% load static %}
+{% block head_list %}
+    <script src="{% static 'curso/js/list.js' %}"></script>
+{% endblock %}
+
+{% block columns %}
+    <tr>
+        <th scope="col" >ID</th>
+        <th scope="col" >Curso</th>
+        <th scope="col" >Persona</th>
+        <th scope="col" >Duración</th>
+        <th scope="col" >Tipo</th>
+        <th scope="col" >Documento Obtenido</th>
+        <th scope="col" >Institución</th>
+        <th scope="col" >Opciones</th>
+    </tr>
+{% endblock %}
+
+{% block javascript_list %}
+
+{% endblock %}
+
+
+
+
+

@@ -1,0 +1,1004 @@
+{% extends 'skin.html' %}
+{% load static %}
+{% block head_body %}
+    <link rel="shortcut icon" href="favicon.ico"> 
+        
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+
+    <!-- FontAwesome JS-->
+    <script defer src="/static/assets/fontawesome/js/all.min.js"></script>
+    
+    <!-- Theme CSS -->  
+    <link id="theme-style" rel="stylesheet" href="/static/assets/css/pillar-1.css">
+        <!--Block head list-->
+    <style>
+        .abs-center {
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+        }
+        .col-color{
+            background-color:
+            rgb(223, 223, 223);
+        }
+        .w-95{
+            width: 95%;
+        }
+    </style>
+    {% block head_list %}{% endblock %}
+{% endblock %}
+{% block content%}
+<div class="card card-primary">
+    <div class="card-header">
+        <h2 class="card-title">
+            <i class="fas fa-user"></i>
+            FICHA DE ORGANIZACIÓN
+        </h2>
+        <a href="{% url 'reports:export_organizacion_pdf' organizacion.pk %}" target="_blank" class="ml-1 btn bg-gradient-primary btn-round float-right">
+            <i class="fas fa-file-pdf"></i> Generar PDF
+        </a>
+        <a href="{% url 'organizaciones:organizacion_update' organizacion.pk %}" class="ml-1 btn bg-gradient-success btn-round float-right">
+            <i class="fas fa-user-edit"></i> Editar
+        </a> 
+        <a href="{{request.META.HTTP_REFERER}}" class="btn bg-gradient-danger btn-round float-right">
+            <i class="fas fa-backward"></i> Atras
+        </a>
+    </div>
+    
+</div>
+
+
+    <div class="card">  
+       
+        <!--ENCABEZADO-->   
+        <div class="card-header bg-secondary rounded">
+
+            <div class="row rounded align-items-center">
+                <!--TÍTULO-->
+                <div class="col text-center">
+                    <div class="row">
+                        {% if organizacion.nombre|length > 0 %}
+                            <h2 class="name text-white text-uppercase text-uppercase"><strong>{{organizacion.nombre}}</strong></h2>
+                        {% endif %}
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col abs-center">
+                            <div class="col-5">
+                                    {%if organizacion.poder_convocatoria == 'Bajo'%}
+                                        <div class="progress resume-progress">
+                                            <div class="progress-bar theme-progress-bar bg-success rounded" role="progressbar" style="width: 33.3%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    {% elif organizacion.poder_convocatoria == 'Medio' %}
+                                        <div class="progress resume-progress">
+                                            <div class="progress-bar theme-progress-bar bg-warning rounded" role="progressbar" style="width: 66.6%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    {% elif organizacion.poder_convocatoria == 'Alto' %}
+                                        <div class="progress resume-progress">
+                                            <div class="progress-bar theme-progress-bar bg-danger" role="progressbar" style="width: 99.9%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    {% endif %}
+                                    <div class="row">
+                                        <h6 class="text-white">Poder de convocatoria: {{organizacion.poder_convocatoria}} </h6>
+                                    </div>
+                            </div>
+                            <div class="col-5">
+                                    {%if organizacion.riesgo == 'Bajo'%}
+                                        <div class="progress resume-progress">
+                                            <div class="progress-bar theme-progress-bar bg-success rounded" role="progressbar" style="width: 33.3%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    {% elif organizacion.riesgo == 'Medio' %}
+                                        <div class="progress resume-progress">
+                                            <div class="progress-bar theme-progress-bar bg-warning rounded" role="progressbar" style="width: 66.6%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    {% elif organizacion.riesgo == 'Alto' %}
+                                        <div class="progress resume-progress">
+                                            <div class="progress-bar theme-progress-bar bg-danger" role="progressbar" style="width: 99.9%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
+                                    {% endif %}
+                                <div class="row">
+                                    <h6 class="text-white">Riesgo: {{organizacion.riesgo}} </h6>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                {% if organizacion.foto %}
+                    <div class="col-2 mb-2">
+                        <img src=" {{ organizacion.foto.url }}" alt="{{candidato.partido}}" class=" img-thumbnail rounded border-2 border-dark" style="height: 170px;">
+                    </div> 
+                {% else %}
+                    <div class="col-2 mb-2">
+                        <img src=" {% static "/img/user1.png" %}" alt="{{candidato.partido}}" class=" img-thumbnail rounded border-2 border-dark" style="height: 170px;">
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+                
+        <!--BODY-->   
+        <div class="card-body bg-white">
+
+            <!-- FECHA CREACIÓN -->
+            <div class="row">
+                <div class="col-1 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center">
+                        <span class="text-white"><i class='fas fa-stopwatch'></i></span> 
+                    </div>
+                </div>
+                <div class="col-2 bg-secondary border border-white rounded abs-center">
+                    <div class="row">
+                        <span class="text-white"><strong>Fecha de Creación </strong></span>    
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col rounded border border-white col-color">
+                            <span class="ml-2">{{organizacion.fecha_creacion|date:" d - M - Y "}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--REGISTRO-->
+            {% if organizacion.registro|length > 0 %}
+                <div class="row">
+                    <div class="col-1 bg-secondary border border-white rounded abs-center">
+                        <div class="text-center">
+                            <span class="text-white"><i class='far fa-calendar-check	'></i></span> 
+                        </div>
+                    </div>
+                    <div class="col-2 bg-secondary border border-white rounded abs-center">
+                        <div class="row">
+                            <span class="text-white"><strong>Registro</strong></span>    
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col rounded border border-white col-color">
+                                <span class="ml-2">{{organizacion.registro }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}  
+
+            <!--TIPO ORGANIZACION-->
+            {% if organizacion.tipo_organizacion|length > 0 %}
+                <div class="row">
+                    <div class="col-1 bg-secondary border border-white rounded abs-center">
+                        <div class="text-center">
+                            <span class="text-white"><i class='far fa-calendar-check	'></i></span> 
+                        </div>
+                    </div>
+                    <div class="col-2 bg-secondary border border-white rounded abs-center">
+                        <div class="row">
+                            <span class="text-white"><strong>Tipo de Organización</strong></span>    
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col rounded border border-white col-color">
+                                <span class="ml-2">{{organizacion.tipo_organizacion }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!--OBJETIVO-->
+            {% if organizacion.objetivo|length > 0 %}
+                <div class="row">
+                    <div class="col-1 bg-secondary border border-white rounded abs-center">
+                        <div class="text-center">
+                            <span class="text-white"><i class='fas fa-compress'></i></span> 
+                        </div>
+                    </div>
+                    <div class="col-2 bg-secondary border border-white rounded abs-center">
+                        <div class="row">
+                            <span class="text-white"><strong>Objetivo de la Organización</strong></span>    
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col rounded border border-white col-color">
+                                <p class="text-justifty m-2"><span>{{organizacion.objetivo }}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}            
+
+            <!--TENDENCIA-->
+            {% if organizacion.tendencia|length > 0 %}
+                <div class="row">
+                    <div class="col-1 bg-secondary border border-white rounded abs-center">
+                        <div class="text-center">
+                            <span class="text-white"><i class='far fa-lightbulb'></i></span> 
+                        </div>
+                    </div>
+                    <div class="col-2 bg-secondary border border-white rounded abs-center">
+                        <div class="row">
+                            <span class="text-white"><strong>Tendencia</strong></span>    
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col rounded border border-white col-color">
+                                <span class="ml-2">{{organizacion.tendencia }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+            {% endif %}
+        
+            <!--INTEGRANTES-->
+            {% if organizacion.integrantes|length > 0 %}
+                <div class="row">
+                    <div class="col-1 bg-secondary border border-white rounded abs-center">
+                        <div class="text-center">
+                            <span class="text-white"><i class='fas fa-sliders-h'></i></span> 
+                        </div>
+                    </div>
+                    <div class="col-2 bg-secondary border border-white rounded abs-center">
+                        <div class="row">
+                            <span class="text-white"><strong>Integrantes</strong></span>    
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col rounded border border-white col-color">
+                                <span class="ml-2">{{organizacion.integrantes}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>    
+            {% endif %}
+                
+            <!--LIDERES-->
+            {% if lideres|length > 0 %}
+                <div class="row">
+                    <div class="col-1 bg-secondary border border-white rounded abs-center">
+                        <div class="text-center">
+                            <span class="text-white"><i class='fas fa-child	'></i></span> 
+                        </div>
+                    </div>
+                    <div class="col-2 bg-secondary border border-white rounded abs-center">
+                        <div class="row">
+                            <span class="text-white"><strong>Dirigentes</strong></span>    
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col rounded border border-white col-color">
+                                {% for lider in lideres %}
+                                    <p class="text-justify m-2"><span>{{ lider.nombre }} {{lider.apaterno}} {{lider.amaterno}} | {{lider.puesto_ocupado}}</span></p>
+                                {% endfor %}    
+                            </div>
+                        </div>
+                    </div>
+                </div>    
+            {% endif %}            
+
+            <!--DIRECCION-->
+            {% if organizacion.direccion|length > 0 %}
+                <div class="row">
+                    <div class="col-1 bg-secondary border border-white rounded abs-center">
+                        <div class="text-center">
+                            <span class="text-white"><i class='fas fa-building'></i></span> 
+                        </div>
+                    </div>
+                    <div class="col-2 bg-secondary border border-white rounded abs-center">
+                        <div class="row">
+                            <span class="text-white"><strong>Dirección de Oficinas</strong></span>    
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col rounded border border-white col-color">
+                                <span class="ml-2">{{organizacion.direccion}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>               
+            {% endif %}            
+
+            <!--TElefono-->
+            {% if organizacion.telefono|length > 0 %}
+                <div class="row">
+                    <div class="col-1 bg-secondary border border-white rounded abs-center">
+                        <div class="text-center">
+                            <span class="text-white"><i class='fa-solid fa-phone'></i></span> 
+                        </div>
+                    </div>
+                    <div class="col-2 bg-secondary border border-white rounded abs-center">
+                        <div class="row">
+                            <span class="text-white"><strong>Teléfono</strong></span>    
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col rounded border border-white col-color">
+                                <span class="ml-2">{{organizacion.telefono}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>      
+            {% endif %}
+
+            <!--correo-->
+            {% if organizacion.correo|length > 0 %}
+                <div class="row">
+                    <div class="col-1 bg-secondary border border-white rounded abs-center">
+                        <div class="text-center">
+                            <span class="text-white"><i class='far fa-envelope-open	'></i></span> 
+                        </div>
+                    </div>
+                    <div class="col-2 bg-secondary border border-white rounded abs-center">
+                        <div class="row">
+                            <span class="text-white"><strong>Correo Electrónico</strong></span>    
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col rounded border border-white col-color">
+                                <span class="ml-2">{{organizacion.correo}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>      
+            {% endif %}
+
+            <!--sitio web-->
+            {% if organizacion.sitio_web|length > 0 %}
+                <div class="row">
+                    <div class="col-1 bg-secondary border border-white rounded abs-center">
+                        <div class="text-center">
+                            <span class="text-white"><i class='fa-brands fa-internet-explorer'></i></span> 
+                        </div>
+                    </div>
+                    <div class="col-2 bg-secondary border border-white rounded abs-center">
+                        <div class="row">
+                            <span class="text-white"><strong>Sitio WEB</strong></span>    
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col rounded border border-white col-color">
+                                <span class="ml-2">{{organizacion.sitio_web}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            
+            <!-- REDES SOCIALES-->
+            {% if organizacion.facebook|length > 0 or organizacion.instagram|length > 0  or organizacion.twitter|length > 0 %}
+                <div class="row">
+                    <div class="col-1 bg-secondary border border-white rounded abs-center">
+                        <div class="text-center">
+                            <span class="text-white"><strong>Redes Sociales</strong></span>
+                        </div>
+                    </div>
+                    <div class="col-2 bg-secondary border border-white rounded">
+                        <div class="row">
+                            {% if organizacion.facebook|length > 0 %}
+                                <div class="row">
+                                    <div class="col rounded ">
+                                        <p class="text-center m-2"><span class="text-white text-center"><i class='fab fa-facebook'></i><strong> Facebook </strong></span></p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if organizacion.instagram|length > 0 %}
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="text-center m-2"><span class="text-white text-center"><i class='fab fa-instagram'></i><strong> Instagram</strong></span></p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if organizacion.twitter|length > 0 %}
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="text-center m-2"><span class="text-white text-center"><i class='fab fa-twitter'></i><strong> Twitter </strong></span></p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col rounded border border-white col-color">
+                            {% if organizacion.facebook|length > 0 %}
+                                <div class="row">
+                                    <div class="col mx-auto">
+                                        <p class="m-2"><span></i>{{organizacion.facebook}}</span></p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if organizacion.instagram|length > 0 %}
+                                <div class="row">
+                                    <div class="col mx-auto">
+                                        <p class="m-2"><span></i>{{organizacion.instagram}}</span></p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if organizacion.twitter|length > 0 %}
+                                <div class="row">
+                                    <div class="col mx-auto">
+                                        <p class="m-2"><span></i>{{organizacion.twitter}}</span></p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        
+                    </div>
+                    
+
+                </div>
+            {% endif %}  
+        
+            <!--Zona de influencia-->
+            {% if organizacion.zona_influencia|length > 0 %}
+                <div class="row">
+                    <div class="col-1 bg-secondary border border-white rounded abs-center">
+                        <div class="text-center">
+                            <span class="text-white"><i class='fas fa-map-marker-alt'></i></span> 
+                        </div>
+                    </div>
+                    <div class="col-2 bg-secondary border border-white rounded abs-center">
+                        <div class="row">
+                            <span class="text-white"><strong>Zona de Influencia</strong></span>    
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col rounded border border-white col-color">
+                                <span class="ml-2">{{organizacion.zona_influencia}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!--Zona de operaciones-->
+            {% if organizacion.zona_operaciones|length > 0 %}
+                <div class="row">
+                    <div class="col-1 bg-secondary border border-white rounded abs-center">
+                        <div class="text-center">
+                            <span class="text-white"><i class='far fa-map'></i></span> 
+                        </div>
+                    </div>
+                    <div class="col-2 bg-secondary border border-white rounded abs-center">
+                        <div class="row">
+                            <span class="text-white"><strong>Zona de Operaciones</strong></span>    
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col rounded border border-white col-color">
+                                <span class="ml-2">{{organizacion.zona_operaciones}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!--Capacidad convocatoria-->
+            {% if organizacion.capacidad_convocatoria|length > 0 %}
+                <div class="row">
+                    <div class="col-1 bg-secondary border border-white rounded abs-center">
+                        <div class="text-center">
+                            <span class="text-white"><i class='fas fa-bullhorn'></i></span> 
+                        </div>
+                    </div>
+                    <div class="col-2 bg-secondary border border-white rounded abs-center">
+                        <div class="row">
+                            <span class="text-white"><strong>Capacidad de Convocatoria</strong></span>    
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col rounded border border-white col-color">
+                                <span class="ml-2">{{organizacion.capacidad_convocatoria}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}   
+        
+            <!--Modus operandi-->
+            {% if organizacion.modus_operandi|length > 0 %}
+                <div class="row">
+                    <div class="col-1 bg-secondary border border-white rounded abs-center">
+                        <div class="text-center">
+                            <span class="text-white"><i class='fas fa-thumbtack	'></i></span> 
+                        </div>
+                    </div>
+                    <div class="col-2 bg-secondary border border-white rounded abs-center">
+                        <div class="row">
+                            <span class="text-white"><strong>Modus Operandi</strong></span>    
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col rounded border border-white col-color">
+                                <p class="text-justify m-2"><span>{{organizacion.modus_operandi}}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+            {% endif %}
+
+            <!--Principales Actividades-->
+            {% if organizacion.principales_actividades|length > 0 %}
+                <div class="row">
+                    <div class="col-1 bg-secondary border border-white rounded abs-center">
+                        <div class="text-center">
+                            <span class="text-white"><i class='fas fa-tasks'></i></span> 
+                        </div>
+                    </div>
+                    <div class="col-2 bg-secondary border border-white rounded abs-center">
+                        <div class="row">
+                            <span class="text-white"><strong>Principales Actividades</strong></span>    
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col rounded border border-white col-color">
+                                <p class="text-justify m-2"><span>{{organizacion.principales_actividades}}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+            {% endif %}
+            
+            <!-- VÍNCULOS-->
+            {% if organizacion.vinculos_os|length > 0 or organizacion.vinculos_op|length > 0 or organizacion.vinculos_pp|length > 0  or organizacion.vinculos_au|length > 0 or organizacion.vinculos_de|length > 0 %}
+                <div class="row">
+                
+                    <div class="col-1 bg-secondary border border-white rounded abs-center">
+                        <div class="text-center">
+                            <span class="text-white"><strong>Vínculos</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="col-2 bg-secondary border border-white rounded">
+                        <div class="row">
+                            {% if organizacion.vinculos_os|length > 0 %}
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="text-center m-2"><span class="text-white text-center"><strong> Organizaciones Sociales </strong></span></p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if organizacion.vinculos_op|length > 0 %}
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="text-center m-2"><span class="text-white text-center"><strong> Organizaciones Políticas</strong></span></p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if organizacion.vinculos_pp|length > 0 %}
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="text-center m-2"><span class="text-white text-center"><strong> Partidos Políticos </strong></span></p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if organizacion.vinculos_au|length > 0 %}
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="text-center m-2"><span class="text-white text-center"><strong> Autoridades </strong></span></p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if organizacion.vinculos_de|length > 0 %}
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="text-center m-2"><span class="text-white text-center"><strong> Delictivos </strong></span></p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="col rounded border border-white col-color">
+                        {% if organizacion.vinculos_os|length > 0 %}
+                            <div class="row border border-white">
+                                <div class="col mx-auto">
+                                    <p class="m-2"><span>{{organizacion.vinculos_os}}</span></p>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if organizacion.vinculos_op|length > 0 %}
+                            <div class="row border border-white">
+                                <div class="col mx-auto">
+                                    <p class="m-2"><span>{{organizacion.vinculos_op}}</span></p>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if organizacion.vinculos_pp|length > 0 %}
+                            <div class="row border border-white">
+                                <div class="col mx-auto ">
+                                    <p class="m-2"><span>{{organizacion.vinculos_pp}}</span></p>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if organizacion.vinculos_au|length > 0 %}
+                            <div class="row border border-white">
+                                <div class="col mx-auto">
+                                    <p class="m-2"><span>{{organizacion.vinculos_au}}</span></p>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if organizacion.vinculos_de|length > 0 %}
+                            <div class="row border border-white">
+                                <div class="col mx-auto">
+                                    <p class="m-2"><span>{{organizacion.vinculos_de}}</span></p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                
+                </div>
+            {% endif %}        
+            
+            <!--Fuente de ingresos-->
+            {% if organizacion.fuente_ingresos|length > 0 %}
+                <div class="row">
+                    <div class="col-1 bg-secondary border border-white rounded abs-center">
+                        <div class="text-center">
+                            <span class="text-white"><i class='fas fa-search-dollar'></i></span> 
+                        </div>
+                    </div>
+                    <div class="col-2 bg-secondary border border-white rounded abs-center">
+                        <div class="row">
+                            <span class="text-white"><strong>Fuente de Ingresos</strong></span>    
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col rounded border border-white col-color">
+                                <p class="text-justify m-2"><span>{{organizacion.fuente_ingresos}}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>     
+            {% endif %}
+
+            <!-- SITUACION PATRIMONIAL -->
+            {% if organizacion.inmuebles|length > 0 or organizacion.vehiculos|length > 0 or organizacion.cuentas_bancarias|length > 0 or organizacion.inverisones|length > 0 or organizacion.negocios|length > 0 %}
+                <div class="row">
+                    <div class="col-1 bg-secondary border border-white rounded abs-center">
+                        <div class="text-center">
+                            <span class="text-white"><strong>Situación Patrimonial</strong></span>
+                        </div>
+                    </div>
+                    
+                    <div class="col-2 bg-secondary border border-white rounded">
+                        <div class="row">
+                            {% if organizacion.inmuebles|length > 0 %}
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="text-center m-2"><span class="text-white text-center"><strong> Inmuebles</strong></span></p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if organizacion.vehiculos|length > 0 %}
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="text-center m-2"><span class="text-white text-center"><strong> Organizaciones vehiculos</strong></span></p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if organizacion.cuentas_bancarias|length > 0 %}
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="text-center m-2"><span class="text-white text-center"><strong> Cuentas bancarias </strong></span></p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if organizacion.inversiones|length > 0 %}
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="text-center m-2"><span class="text-white text-center"><strong> Inverisones </strong></span></p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if organizacion.negocios|length > 0 %}
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="text-center m-2"><span class="text-white text-center"><strong> Negocios </strong></span></p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="col rounded border border-white col-color">
+                        {% if organizacion.inmuebles|length > 0 %}
+                            <div class="row border border-white">
+                                <div class="col mx-auto">
+                                    <p class="m-2"><span>{{organizacion.inmuebles}}</span></p>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if organizacion.vehiculos|length > 0 %}
+                            <div class="row border border-white">
+                                <div class="col mx-auto">
+                                    <p class="m-2"><span>{{organizacion.vehiculos}}</span></p>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if organizacion.cuentas_bancarias|length > 0 %}
+                            <div class="row border border-white">
+                                <div class="col mx-auto ">
+                                    <p class="m-2"><span>{{organizacion.cuentas_bancarias}}</span></p>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if organizacion.inversiones|length > 0 %}
+                            <div class="row border border-white">
+                                <div class="col mx-auto">
+                                    <p class="m-2"><span>{{organizacion.inversiones}}</span></p>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if organizacion.negocios|length > 0 %}
+                            <div class="row border border-white">
+                                <div class="col mx-auto">
+                                    <p class="m-2"><span>{{organizacion.negocios}}</span></p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                                             
+                </div>
+            {% endif %}
+        
+        <!--DEMANDAS-->
+        {% if organizacion.demandas|length > 0 %}
+            <div class="row">
+                <div class="col-1 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center">
+                        <span class="text-white"><i class='fas fa-landmark'></i></span> 
+                    </div>
+                </div>
+                <div class="col-2 bg-secondary border border-white rounded abs-center">
+                    <div class="row">
+                        <span class="text-white"><strong>Demandas</strong></span>    
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col rounded border border-white col-color">
+                            <p class="text-justify m-2"><span>{{organizacion.demandas}}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>       
+        {% endif %}
+
+        <!--MEDIDAS DE PRESIóN-->
+        {% if organizacion.medidas_presion|length > 0 %}
+            <div class="row">
+                <div class="col-1 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center">
+                        <span class="text-white"><i class='fas fa-tachometer-alt'></i></span> 
+                    </div>
+                </div>
+                <div class="col-2 bg-secondary border border-white rounded abs-center">
+                    <div class="row">
+                        <span class="text-white"><strong>Medidas de Presión</strong></span>    
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col rounded border border-white col-color">
+                            <p class="text-justify m-2"><span>{{organizacion.medidas_presion}}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        {% endif %}
+        
+        <!--GRUPOS DE CHOQUE-->
+        {% if organizacion.grupos_choque|length > 0 %}
+            <div class="row">
+                <div class="col-1 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center">
+                        <span class="text-white"><i class='fas fa-user-friends'></i></span> 
+                    </div>
+                </div>
+                <div class="col-2 bg-secondary border border-white rounded abs-center">
+                    <div class="row">
+                        <span class="text-white"><strong>Grupos de choque</strong></span>    
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col rounded border border-white col-color">
+                            <p class="text-justify m-2"><span>{{organizacion.grupos_choque}}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        {% endif %}
+
+        <!-- CONFLICTOS-->
+        {% if organizacion.conflictos_organizaciones|length > 0 or organizacion.conflictos_legales|length > 0 %}
+            <div class="row">
+                
+                <div class="col-1 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center">
+                        <span class="text-white"><strong>Conflictos</strong></span>
+                    </div>
+                </div>
+
+                <div class="col-2 bg-secondary border border-white rounded">
+                    <div class="row">
+                        {% if organizacion.conflictos_organizaciones|length > 0 %}
+                            <div class="row">
+                                <div class="col">
+                                    <p class="text-center m-2"><span class="text-white text-center"><strong> con Organizaciones</strong></span></p>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if organizacion.conflictos_legales|length > 0 %}
+                            <div class="row">
+                                <div class="col">
+                                    <p class="text-center m-2"><span class="text-white text-center"><strong> Legales</strong></span></p>
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                    </div>
+                </div>
+
+                <div class="col rounded border border-white col-color">
+                    {% if organizacion.conflictos_organizaciones|length > 0 %}
+                        <div class="row border border-white">
+                            <div class="col mx-auto">
+                                <p class=" text-justify m-2"><span>{{organizacion.conflictos_organizaciones}}</span></p>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if organizacion.conflictos_legales|length > 0 %}
+                        <div class="row border border-white">
+                            <div class="col mx-auto">
+                                <p class="text-justify m-2"><span>{{organizacion.conflictos_legales}}</span></p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- grupos disidentes-->
+        {% if organizacion.grupos_disidentes|length > 0 %}
+            <div class="row">
+                <div class="col-1 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center">
+                        <span class="text-white"><i class='fas fa-user-friends'></i></span> 
+                    </div>
+                </div>
+                <div class="col-2 bg-secondary border border-white rounded abs-center">
+                    <div class="row">
+                        <span class="text-white"><strong>Grupos Disidentes</strong></span>    
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col rounded border border-white col-color">
+                            <p class="text-justify m-2"><span>{{organizacion.grupos_disidentes }}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        {% endif %}
+
+        <!-- Organos de Difusión-->
+        {% if organizacion.organos_difusion|length > 0 %}
+            <div class="row">
+                <div class="col-1 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center">
+                        <span class="text-white"><i class='fas fa-video'></i></span> 
+                    </div>
+                </div>
+                <div class="col-2 bg-secondary border border-white rounded abs-center">
+                    <div class="row">
+                        <span class="text-white"><strong>Órganos de Difusión</strong></span>    
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col rounded border border-white col-color">
+                            <p class="text-justify m-2"><span>{{organizacion.organos_difusion }}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>   
+        {% endif %}
+
+        <!-- Observaciones-->
+        {% if organizacion.observaciones|length > 0 %}
+            <div class="row">
+                <div class="col-1 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center">
+                        <span class="text-white"><i class='far fa-eye'></i></span> 
+                    </div>
+                </div>
+                <div class="col-2 bg-secondary border border-white rounded abs-center">
+                    <div class="row">
+                        <span class="text-white"><strong>Observaciones</strong></span>    
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col rounded border border-white col-color">
+                            <p class="text-justify m-2"><span>{{organizacion.observaciones }}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>   
+        {% endif %}
+
+        <!-- Perfil-->
+        {% if organizacion.perfil|length > 0 %}
+            <div class="row">
+                <div class="col-1 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center">
+                        <span class="text-white"><i class='fas fa-portrait'></i></span> 
+                    </div>
+                </div>
+                <div class="col-2 bg-secondary border border-white rounded abs-center">
+                    <div class="row">
+                        <span class="text-white"><strong>Perfil</strong></span>    
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row">
+                        <div class="col rounded border border-white col-color">
+                            <p class="text-justify m-2"><span>{{organizacion.perfil }}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        {% endif %}
+
+        <!--EVENTOS-->
+        {% if detalles|length > 0 %}
+            <div class="row">
+                <div class="col-1 bg-secondary border border-white rounded abs-center">
+                    <div class="text-center">
+                        <span class="text-white"><strong>Acciones Relevantes</strong></span>
+                    </div>
+                </div>
+                <div class="col">
+                    {% for detalle in detalles %}
+                        {% if detalle.evento.fecha_evento|length > 0 %} 
+                            <div class="row">
+                                <div class="col-2 bg-secondary border border-white rounded abs-center">
+                                    <p class="text-center"><span class="text-white"><strong>{{detalle.evento.fecha_evento}}</strong></span></p>
+                                </div>
+                                <div class="col rounded border border-white col-color">
+                                    <h6 class="mt-2 text-dark text-center" ><strong> {{detalle.evento.nombre }} </strong></h6>
+                                    <p class=" m-2 text-justify"> {{  detalle.evento.descripcion }} </p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>                            
+            </div>
+        {% endif %}
+        <p>
+
+    </div>
+    <!--Footer-->
+    <div class="card-footer bg-secondary rounded pd-4 mb-1" >
+        <h6 class="name text-center text-white" ><strong>Última actualización por: {{organizacion.user}} | {{organizacion.modified}} hrs.</strong></h6>
+    </div>
+   
+{% endblock %} 
+
+

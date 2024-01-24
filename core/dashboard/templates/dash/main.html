@@ -1,0 +1,41 @@
+{% extends "skin.html" %}
+{% load static %}
+{% block content %}
+    <div class="modal fade" id="miModal" tabindex="-1" role="dialog" aria-labelledby="miModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="miModalLabel">Aviso de Privacidad</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center font-weight-bold">
+                    Términos y Condiciones de Uso
+                </p>
+                <hr>
+                <p class="fs-6 text-justify">Los siguientes Términos y Condiciones, son las reglas de operación y uso de la Plataforma.</p>
+
+                <p class="fs-6 text-justify">- El usuario capturista tendrá la responsabilidad de verificar la veracidad, exactitud, legitimidad y vigencia de la información.</p>
+
+                <!-- <p class="fs-6 text-justify">2. Derivado de lo anterior, cualquier acción realizada por los usuarios que afecte la integridad y el servicio de la plataforma, es responsabilidad del solicitante de la cuenta de usuario, siendo su responsabilidad subsanar las fallas derivadas de su acción, independientemente de las sanciones y compensaciones por daños y perjuicios que se pudieran ocasionar. </p> -->
+
+                <p class="fs-6 text-justify"> - Queda prohibida la copia, distribución, transmisión y publicación, sin previa y expresa autorización de su jefe inmediato.</p>
+
+                <!-- <p class="fs-6 text-justify" >4. La Dirección de General de Información, no es responsable, por información, datos, documentos etc., proporcionados por los Usuarios y que sean generados y/o procesados fuera de la Plataforma.</p> -->
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <!-- Otros botones según tus necesidades -->
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+          $('#miModal').modal('show');
+        });
+    </script>
+{% endblock %}

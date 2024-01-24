@@ -1,0 +1,20 @@
+{% extends 'list.html' %}
+{% load static %}
+{% block head_list %}
+    <script src="{% static 'ficha/js/list.js' %}"></script>
+{% endblock %}
+
+{% block columns %}
+    <th>id</th>
+    <th>Nombre</th>
+    <th>Foto</th>
+    <th>Estatus de ficha</th>
+    <th>Organización</th>
+    <th>Modificación</th>
+    <th class="text-center">Opciones</th>
+{% endblock %}
+
+{% block javascript_list %}
+
+{% endblock %}
+

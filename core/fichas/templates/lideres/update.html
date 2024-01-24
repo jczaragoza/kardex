@@ -1,0 +1,358 @@
+{% extends 'list.html' %}
+{% load widget_tweaks %}
+{% load security_extras %}
+{% load static %}
+{% block head_list %}
+
+    <!--Formvalidation Libs-->
+    <link rel="stylesheet" href="{% static 'lib/formvalidation-1.9.0/css/formValidation.min.css' %}">
+    <script src="{% static 'lib/formvalidation-1.9.0/js/es6-shim.min.js' %}"></script>
+    <script src="{% static 'lib/formvalidation-1.9.0/js/FormValidation.min.js' %}"></script>
+    <script src="{% static 'lib/formvalidation-1.9.0/js/plugins/Bootstrap.min.js' %}"></script>
+    <script src="{% static 'lib/formvalidation-1.9.0/js/locales/es_ES.min.js' %}"></script>
+    
+    <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
+    <script src="{% static 'lib/select2-4.0.13/js/i18n/es.js' %}"></script>
+
+    <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}">
+
+    <script src="{% static 'lideres/js/update.js' %}"></script>
+
+    <style>
+        .btn-flotante {
+            font-size: 16px; /* Cambiar el tamaño de la tipografia */
+            text-transform: uppercase; /* Texto en mayusculas */
+            font-weight: bold; /* Fuente en negrita o bold */
+            color: #ffffff; /* Color del texto */
+            border-radius: 5px; /* Borde del boton */
+            letter-spacing: 2px; /* Espacio entre letras */
+            background-color: #E91E63; /* Color de fondo */
+            padding: 5px 33px; /* Relleno del boton */
+            position: fixed;
+            bottom: 226px;
+            right: 40px;
+            transition: all 300ms ease 0ms;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+            z-index: 90;
+        }
+    </style>
+
+{% endblock %}
+
+{% block content %}
+    <form class="form" method="post" action="." enctype="multipart/form-data" id="frmForm" data-url="{{ list_url }}">
+        <input type="hidden" name="user" value="{{ user.pk}}" />
+        <div class="card {{ dshboard.card }}">
+            <div class="card-header">
+                <h3 class="card-title">
+                    {% if action == 'add' %}
+                        <i class="fas fa-plus"></i>
+                    {% else %}
+                        <i class="fas fa-edit"></i>
+                    {% endif %}
+                    {{ title }}
+                </h3>
+            </div>
+            <div class="card-body" style="display: block;">
+                <div class="container-fluid">
+                    <input type="hidden" name="action" id="action" value="{{ action }}">
+                    {% csrf_token %}
+                    {% for field in form.visible_fields %}
+                        <div class="form-group">
+                            <label for="{{ field.id_for_label }}" id="id_{{ field.name }}_label">{{ field.label }}</label>
+                            {% if field.name == 'domicilios' %}
+                                <div style="display: inline-block; width: 95%;">  {# Ajusta el ancho del campo 95 % #}
+                                    {{ field|add_class:'form-control'|attr:"autocomplete:off" }}
+                                </div>
+                                <button type="button" class="btn btn-secondary btnAddDomicilio mb-3"><i class="fas fa-plus"></i></button>
+                            {% elif field.name == 'vehiculos' %}
+                                <div style="display: inline-block; width: 90%;">  {# Ajusta el ancho del campo 95 % #}
+                                    {{ field|add_class:'form-control'|attr:"autocomplete:off" }}
+                                </div>
+                                <button type="button" class="btn btn-secondary btnAddVehiculo mb-3"><i class="fas fa-plus"></i></button>
+                            {% elif field.name == 'temas_atencion' %}
+                                <div style="display: inline-block; width: 95%;">  {# Ajusta el ancho del campo a un 95 % #}
+                                    {{ field|add_class:'form-control'|attr:"autocomplete:off" }}
+                                </div>
+                                <button type="button" class="btn btn-secondary btnAddTemas mb-3"><i class="fas fa-plus"></i></button>
+                            {% elif field.name == 'experiencia_laboral' %}
+                                <div style="display: inline-block; width: 95%;">  {# Ajusta el ancho del campo a un 95 % #}
+                                    {{ field|add_class:'form-control'|attr:"autocomplete:off" }}
+                                </div>
+                                <button type="button" class="btn btn-secondary btnAddExperiencia mb-3"><i class="fas fa-plus"></i></button>
+                            {% elif field.name == 'cargos_populares' %}
+                                <div style="display: inline-block; width: 95%;">  {# Ajusta el ancho del campo a un 95 % #}
+                                    {{ field|add_class:'form-control'|attr:"autocomplete:off" }}
+                                </div>
+                                <button type="button" class="btn btn-secondary btnAddCargo mb-3"><i class="fas fa-plus"></i></button>
+                            {%  elif field.name == 'eventos' %}
+                                <div style="display: inline-block; width: 90%;">  {# Ajusta el ancho del campo a un 95 % #}
+                                    {{ field|add_class:'form-control'|attr:"autocomplete:off" }}
+                                </div>
+                                <button type="button" class="btn btn-secondary btnAddEvento mb-3"><i class="fas fa-plus"></i></button>
+                            {% elif field|is_checkbox %}
+                                <br>{{ field }}
+                            {% else %}
+                                {{ field|add_class:'form-control'|attr:"autocomplete:off" }}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <!-- {% csrf_token %}
+                    {% for field in form.visible_fields %}
+                        <div class="form-group">
+                            <label for="{{ field.id_for_label }}" id="id_{{ field.name }}_label">{{ field.label }}</label>
+                            {% if field|is_checkbox %}
+                                 <br>{{ field }}
+                            {% else %}
+                                {{ field|add_class:'form-control'|attr:"autocomplete:off" }}
+                            {% endif %}
+                        </div>
+                    {% endfor %} -->
+                    
+                    
+                    <!-- Agregar Evento Modal -->
+                    <!-- <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <input type="hidden" name="action" value="{{ action }}">
+                        <label class="btn btn-secondary active">
+                            <input type="radio" class="btnAddEvento" autocomplete="off" checked> Agregar Evento <i class="fas fa-flag"></i>
+                        </label> 
+                    </div>-->
+
+                    <!-- Agregar Vehículo -->
+                    <!-- <div class="btn-group btn-group-toggle with-button" data-toggle="buttons">
+                        <input type="hidden" name="action" value="{{ action }}">
+                        <label class="btn btn-secondary active">
+                            <input type="radio" class="btnAddVehiculo" autocomplete="off" checked> Agregar Vehículo <i class="fas fa-car"></i>
+                        </label> 
+                    </div> -->
+
+                    <!-- Agregar Domicilio -->
+                    <!-- <div class="btn-group btn-group-toggle with-button" data-toggle="buttons">
+                        <input type="hidden" name="action" value="{{ action }}">
+                        <label class="btn btn-secondary active">
+                            <input type="radio" class="btnAddDomicilio" autocomplete="off" checked> Agregar Domicilio <i class="fas fa-house-user"></i>
+                        </label> 
+                    </div> -->
+
+                    <!-- Agregar Temas de Atención -->
+                    <!-- <div class="btn-group btn-group-toggle with-button" data-toggle="buttons">
+                        <input type="hidden" name="action" value="{{ action }}">
+                        <label class="btn btn-secondary active">
+                            <input type="radio" class="btnAddTemas" autocomplete="off" checked> Agregar Tema de Atención <i class="fas fa-sitemap	"></i>
+                        </label> 
+                    </div> -->
+                </div>
+            </div>
+            {% block box_footer %}
+                <div class="card-footer">
+                    {% block buttons %}
+                        <button type="submit" class="btn btn-primary btn-flat">
+                            <i class="fas fa-save"></i> Guardar registro
+                        </button>
+                        <a href="{{ list_url }}" class="btn btn-danger btn-flat">
+                            <i class="fas fa-times"></i> Cancelar
+                        </a>
+                    {% endblock %}
+                </div>
+            {% endblock %}
+        </div>
+    </form>
+
+    <!-- Modal Evento -->
+    <div class="modal fade" id="myModalEvento" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <form id="frmEvento" enctype="multipart/form-data" method="post">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <b>{{titleModalEvento}}</b>
+                        <i class="fas fa-flag"></i>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        {% for field in frmEvento.visible_fields %}
+                            <div class="form-group">
+                                <label>{{ field.label }}:</label>
+                                {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i> Guardar Evento
+                        </button>
+                        {% comment %} <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> {% endcomment %}
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal Domicilio -->
+    <div class="modal fade" id="myModalDomicilio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <form id="frmDomicilio" enctype="multipart/form-data" method="post">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <b>Agregar Domicilio</b>
+                        <i class="fas fa-flag"></i>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        {% for field in frmDomicilio.visible_fields %}
+                            <div class="form-group">
+                                <label>{{ field.label }}:</label>
+                                {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i> Guardar Domicilio
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal Vehículo -->
+    <div class="modal fade" id="myModalVehiculo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <form id="frmvehiculo" enctype="multipart/form-data" method="post">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <b>Agregar Vehículo</b>
+                        <i class="fas fa-flag"></i>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        {% for field in frmVehiculo.visible_fields %}
+                            <div class="form-group">
+                                <label>{{ field.label }}:</label>
+                                {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i> Guardar Vehículo	
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal Temas de Atención -->
+    <div class="modal fade" id="myModalTemas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <form id="frmTemas" enctype="multipart/form-data" method="post">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <b>Agregar Temas de Atención</b>
+                        <i class="fas fa-flag"></i>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        {% for field in frmTemas.visible_fields %}
+                            <div class="form-group">
+                                <label>{{ field.label }}:</label>
+                                {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i> Guardar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal Experiencia Laboral -->
+    <div class="modal fade" id="myModalExperiencia" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <form id="frmExperiencia" enctype="multipart/form-data" method="post">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <b>Experiencia Laboral</b>
+                        <i class="fas fa-flag"></i>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        {% for field in frmExperiencia.visible_fields %}
+                            <div class="form-group">
+                                <label>{{ field.label }}:</label>
+                                {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i> Guardar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Modal Cargos de elección popular -->
+    <div class="modal fade" id="myModalCargo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <form id="frmCargo" enctype="multipart/form-data" method="post">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <b>Agregar Cargo Popular</b>
+                        <i class="fas fa-flag"></i>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                        {% for field in frmCargo.visible_fields %}
+                            <div class="form-group">
+                                <label>{{ field.label }}:</label>
+                                {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i> Guardar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    
+
+{% endblock %}
+    
